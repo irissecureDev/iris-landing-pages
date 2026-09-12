@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Scale, Calendar, ShoppingBag, ShoppingCart, CreditCard, Package, FileText, BarChart2, Users, TrendingUp, RefreshCw, TrendingDown, Lightbulb } from "lucide-react";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,400;1,9..144,600&family=Nunito:wght@300;400;500;600;700&display=swap');
@@ -407,10 +408,10 @@ const ingredients = [
 ];
 
 const mainFeatures = [
-  { icon: "⚖️", title: "Gram-Level Recipe Costing", desc: "Every ingredient entered by gram. Cost-per-unit calculated automatically, updated when supplier prices change.", tag: "Bakery-Specific" },
-  { icon: "📋", title: "Daily Production Planning", desc: "Schedule your bake by item and quantity. Ingredient requirements pulled from your current inventory before you start.", tag: "Saves Waste" },
-  { icon: "🏪", title: "Cash Register & POS", desc: "Sell at the counter. Every transaction syncs to your books instantly — no manual entry, no end-of-day reconciliation.", tag: "Built-in" },
-  { icon: "🛒", title: "Wholesale Reseller Portal", desc: "Café accounts log in, place standing orders, and get auto-invoiced. You stop being the middleman in your own operation.", tag: "Revenue Growth" },
+  { icon: "scale", title: "Gram-Level Recipe Costing", desc: "Every ingredient entered by gram. Cost-per-unit calculated automatically, updated when supplier prices change.", tag: "Bakery-Specific" },
+  { icon: "calendar", title: "Daily Production Planning", desc: "Schedule your bake by item and quantity. Ingredient requirements pulled from your current inventory before you start.", tag: "Saves Waste" },
+  { icon: "shopping-bag", title: "Cash Register & POS", desc: "Sell at the counter. Every transaction syncs to your books instantly — no manual entry, no end-of-day reconciliation.", tag: "Built-in" },
+  { icon: "cart", title: "Wholesale Reseller Portal", desc: "Café accounts log in, place standing orders, and get auto-invoiced. You stop being the middleman in your own operation.", tag: "Revenue Growth" },
 ];
 
 const plannerItems = [
@@ -421,12 +422,12 @@ const plannerItems = [
 ];
 
 const railFeatures = [
-  { emoji: "💳", title: "Iris Pay Checkout", desc: "Card and mobile payments at the counter. Every sale posts to P&L instantly." },
-  { emoji: "📦", title: "Ingredient Inventory", desc: "Auto-alerts when stock drops below threshold. Never run out of butter at 4am." },
-  { emoji: "📄", title: "Wholesale Invoicing", desc: "Professional invoices with logo and QR code, auto-sent to café accounts on delivery." },
-  { emoji: "📊", title: "Profitability by Product", desc: "Which items make the most money. Which ones you're subsidizing without knowing." },
-  { emoji: "🧑‍🍳", title: "Staff Hours & Payroll", desc: "Log baker hours by shift, calculate wages, run payroll — same platform." },
-  { emoji: "📈", title: "Weekly Sales Reports", desc: "Revenue, top items, ingredient usage, and net margin. Every Monday, automatically." },
+  { emoji: "credit-card", title: "Iris Pay Checkout", desc: "Card and mobile payments at the counter. Every sale posts to P&L instantly." },
+  { emoji: "package", title: "Ingredient Inventory", desc: "Auto-alerts when stock drops below threshold. Never run out of butter at 4am." },
+  { emoji: "file-text", title: "Wholesale Invoicing", desc: "Professional invoices with logo and QR code, auto-sent to café accounts on delivery." },
+  { emoji: "bar-chart", title: "Profitability by Product", desc: "Which items make the most money. Which ones you're subsidizing without knowing." },
+  { emoji: "users", title: "Staff Hours & Payroll", desc: "Log baker hours by shift, calculate wages, run payroll — same platform." },
+  { emoji: "trending", title: "Weekly Sales Reports", desc: "Revenue, top items, ingredient usage, and net margin. Every Monday, automatically." },
 ];
 
 const testimonials = [
@@ -434,6 +435,18 @@ const testimonials = [
   { q: "The wholesale portal changed everything. 6 café accounts, orders placed online, invoices sent automatically. I went from 3 hours of admin weekly to 20 minutes.", name: "Sophie L.", role: "Baker-Owner — Lune Bakehouse, Austin TX", init: "S", primary: false },
   { q: "Before this, I was guessing flour orders every week. Now the production planner tells me exactly what I need. Zero waste weeks are actually possible now.", name: "David O.", role: "Head Baker — The Grain Studio, Atlanta GA", init: "D", primary: false },
 ];
+
+
+const BK_ICONS = {
+  scale: <Scale size={22} />, calendar: <Calendar size={22} />,
+  "shopping-bag": <ShoppingBag size={22} />, cart: <ShoppingCart size={22} />,
+  "credit-card": <CreditCard size={22} />, package: <Package size={22} />,
+  "file-text": <FileText size={22} />, "bar-chart": <BarChart2 size={22} />,
+  users: <Users size={22} />, trending: <TrendingUp size={22} />,
+  refresh: <RefreshCw size={22} />, "trending-down": <TrendingDown size={22} />,
+  lightbulb: <Lightbulb size={22} />,
+};
+const IconBk = ({ name }) => BK_ICONS[name] || null;
 
 export default function BakeryPage() {
   const [showModal, setShowModal] = useState(false);
@@ -588,7 +601,7 @@ export default function BakeryPage() {
           </div>
           <div className="pain-right">
             {[
-              { emoji: "📦", title: "Overproduction every week", body: "You bake 60 donuts. You sell 41. The other 19 go in the trash. Every unsold unit is pure ingredient cost with no return. Without data, this never stops." },
+              { emoji: "package", title: "Overproduction every week", body: "You bake 60 donuts. You sell 41. The other 19 go in the trash. Every unsold unit is pure ingredient cost with no return. Without data, this never stops." },
               { emoji: "🧾", title: "Wholesale that costs more than it earns", body: "Three café clients. Invoiced by text. Paid late. No idea if the wholesale price covers your actual cost to produce and deliver. It often doesn't." },
             ].map((p, i) => (
               <div className="pain-issue" key={i}>
@@ -610,7 +623,7 @@ export default function BakeryPage() {
           <div className="features-grid">
             {mainFeatures.map((f, i) => (
               <div className="feat-card" key={i}>
-                <div className="feat-icon">{f.icon}</div>
+                <div className="feat-icon"><IconBk name={f.icon} /></div>
                 <h3>{f.title}</h3>
                 <p>{f.desc}</p>
                 <div className="feat-tag">{f.tag}</div>
@@ -652,12 +665,12 @@ export default function BakeryPage() {
             </div>
             <div className="planner-feats">
               {[
-                { icon: "🔄", title: "Auto-pulls from inventory", desc: "Add items to the bake plan and the system checks current stock. Tells you exactly what to order before the market opens." },
-                { icon: "📉", title: "Overproduce alerts", desc: "60 donuts scheduled, but your last 3 Mondays averaged 42 sold. Iris flags the discrepancy before you fire up the fryer." },
-                { icon: "💡", title: "Margin-aware scheduling", desc: "Low-margin items flagged in your production plan. Reprice, substitute, or cut before you bake a batch that costs you money." },
+                { icon: "refresh", title: "Auto-pulls from inventory", desc: "Add items to the bake plan and the system checks current stock. Tells you exactly what to order before the market opens." },
+                { icon: "trending-down", title: "Overproduce alerts", desc: "60 donuts scheduled, but your last 3 Mondays averaged 42 sold. Iris flags the discrepancy before you fire up the fryer." },
+                { icon: "lightbulb", title: "Margin-aware scheduling", desc: "Low-margin items flagged in your production plan. Reprice, substitute, or cut before you bake a batch that costs you money." },
               ].map((f, i) => (
                 <div className="pf-row" key={i}>
-                  <div className="pf-icon">{f.icon}</div>
+                  <div className="pf-icon"><IconBk name={f.icon} /></div>
                   <div><div className="pf-h">{f.title}</div><p className="pf-p">{f.desc}</p></div>
                 </div>
               ))}
@@ -675,7 +688,7 @@ export default function BakeryPage() {
         <div className="rail-scroll">
           {railFeatures.map((f, i) => (
             <div className="rail-card" key={i}>
-              <span className="rail-emoji">{f.emoji}</span>
+              <span className="rail-emoji"><IconBk name={f.emoji} /></span>
               <h3>{f.title}</h3>
               <p>{f.desc}</p>
             </div>
@@ -832,7 +845,7 @@ export default function BakeryPage() {
               </>
             ) : (
               <div className="success-wrap">
-                <span className="success-emoji">🥖</span>
+                <span className="success-emoji"><ShoppingBag size={48} color="var(--crust)" /></span>
                 <div className="success-h">Fresh start incoming!</div>
                 <p className="success-p">Setup link on its way to <strong style={{ color: "var(--crust-dark)" }}>{form.email}</strong>. First recipe cost report ready before your next bake.</p>
               </div>

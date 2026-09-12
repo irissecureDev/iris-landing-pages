@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Car, LayoutDashboard, Package, Receipt, FileText, BarChart2, CreditCard, Bell, Users, TrendingUp, Globe, Wrench, Clock } from "lucide-react";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
@@ -662,19 +663,19 @@ const inventory = [
 ];
 
 const mainFeatures = [
-  { icon: "🚗", title: "Profit Per Vehicle Tracking", desc: "Buy price, reconditioning costs, transport, fees — every cost tracked per unit. Know your real margin before you price it.", badge: "Dealer-Specific" },
-  { icon: "📦", title: "Inventory Management", desc: "Every vehicle on your lot with stock number, days on lot, asking price, and margin — visible in one dashboard.", badge: "Real-Time" },
-  { icon: "💰", title: "Sales Rep Commission Tracking", desc: "Set commission structures per rep, per deal type. Commissions calculate automatically when a deal closes.", badge: "Saves Hours" },
-  { icon: "🧾", title: "Deal Jackets & Auto-Invoicing", desc: "Generate professional buyer's orders and invoices directly from closed deals. Customers receive them instantly.", badge: "1-Click" },
+  { icon: "car", title: "Profit Per Vehicle Tracking", desc: "Buy price, reconditioning costs, transport, fees — every cost tracked per unit. Know your real margin before you price it.", badge: "Dealer-Specific" },
+  { icon: "dashboard", title: "Inventory Management", desc: "Every vehicle on your lot with stock number, days on lot, asking price, and margin — visible in one dashboard.", badge: "Real-Time" },
+  { icon: "receipt", title: "Sales Rep Commission Tracking", desc: "Set commission structures per rep, per deal type. Commissions calculate automatically when a deal closes.", badge: "Saves Hours" },
+  { icon: "file-text", title: "Deal Jackets & Auto-Invoicing", desc: "Generate professional buyer's orders and invoices directly from closed deals. Customers receive them instantly.", badge: "1-Click" },
 ];
 
 const moreFeatures = [
-  { emoji: "📊", title: "Floor Plan Tracking", desc: "Track vehicles financed through floor plan lenders. See interest accruing per unit — know when to move a car." },
-  { emoji: "💳", title: "Iris Pay", desc: "Accept deposits, down payments, and full purchase amounts via card or mobile money. Funds hit your account fast." },
+  { emoji: "bar-chart", title: "Floor Plan Tracking", desc: "Track vehicles financed through floor plan lenders. See interest accruing per unit — know when to move a car." },
+  { emoji: "credit-card", title: "Iris Pay", desc: "Accept deposits, down payments, and full purchase amounts via card or mobile money. Funds hit your account fast." },
   { emoji: "📈", title: "Monthly Gross Report", desc: "Total front-end gross, back-end gross, and net profit per month — exactly what your accountant and lender need." },
   { emoji: "🔧", title: "Reconditioning Cost Log", desc: "Log every detail fee, mechanical repair, and cosmetic fix per vehicle. Stop guessing what the lot really costs you." },
   { emoji: "📋", title: "Buyer's Order Generation", desc: "Professional buyer's orders with all fees, taxes, and deal terms populated automatically from your deal data." },
-  { emoji: "🌍", title: "Multi-Location Support", desc: "Running more than one lot? Consolidated reporting across all locations with per-location breakdowns." },
+  { emoji: "globe", title: "Multi-Location Support", desc: "Running more than one lot? Consolidated reporting across all locations with per-location breakdowns." },
 ];
 
 const testimonials = [
@@ -682,6 +683,17 @@ const testimonials = [
   { q: "Tracking commissions used to be a spreadsheet nightmare. Now every deal closes and my reps can see their commission instantly. No more disputes, no more manual calculations on Saturday mornings.", name: "Jennifer R.", role: "GM — Riverside Motors, Atlanta GA", init: "J" },
   { q: "The days-on-lot feature alone changed how I buy. I can see exactly which cars are sitting past 45 days and adjust pricing before they kill my floor plan interest. Game changer.", name: "Tony N.", role: "Owner — TN Auto Group, Houston TX", init: "T" },
 ];
+
+
+const D_ICONS = {
+  car: <Car size={22} />, dashboard: <LayoutDashboard size={22} />,
+  receipt: <Receipt size={22} />, "file-text": <FileText size={22} />,
+  "bar-chart": <BarChart2 size={22} />, "credit-card": <CreditCard size={22} />,
+  users: <Users size={22} />, bell: <Bell size={22} />,
+  trending: <TrendingUp size={22} />, globe: <Globe size={22} />,
+  wrench: <Wrench size={22} />, clock: <Clock size={22} />,
+};
+const IconD = ({ name }) => D_ICONS[name] || null;
 
 export default function CarDealerPage() {
   const [showModal, setShowModal] = useState(false);
@@ -718,9 +730,9 @@ export default function CarDealerPage() {
   };
 
   const marqueeItems = [
-    "Profit Per Unit", "🚗", "Inventory Dashboard", "🔑", "Commission Tracking",
-    "📋", "Deal Jackets", "💰", "Floor Plan Alerts", "📊", "Reconditioning Costs",
-    "🏁", "Days on Lot", "🚘", "Monthly Gross Report",
+    "Profit Per Unit", "", "Inventory Dashboard", "🔑", "Commission Tracking",
+    "", "Deal Jackets", "", "Floor Plan Alerts", "", "Reconditioning Costs",
+    "", "Days on Lot", "", "Monthly Gross Report",
   ];
 
   return (
@@ -879,7 +891,7 @@ export default function CarDealerPage() {
             <div className="feat-list">
               {mainFeatures.map((f, i) => (
                 <div className="feat-row" key={i}>
-                  <div className="feat-icon-box">{f.icon}</div>
+                  <div className="feat-icon-box"><IconD name={f.icon} /></div>
                   <div className="feat-text">
                     <h4>{f.title}</h4>
                     <p>{f.desc}</p>
@@ -945,7 +957,7 @@ export default function CarDealerPage() {
           <div className="more-grid">
             {moreFeatures.map((f, i) => (
               <div className="more-card" key={i}>
-                <span className="more-card-emoji">{f.emoji}</span>
+                <span className="more-card-emoji"><IconD name={f.emoji} /></span>
                 <h3>{f.title}</h3>
                 <p>{f.desc}</p>
               </div>
@@ -1056,7 +1068,7 @@ export default function CarDealerPage() {
       {/* CTA */}
       <section className="cta-section">
         <div className="cta-inner">
-          <span className="cta-emoji">🏁</span>
+          
           <h2 className="cta-title">Stop losing gross on<br />every deal you close.</h2>
           <p className="cta-sub">Every untracked recon cost, every car sitting past 45 days, every commission dispute is margin walking off your lot. Iris Financial closes those gaps — free to start, 15 minutes to set up.</p>
           <div className="cta-btns">
@@ -1110,7 +1122,7 @@ export default function CarDealerPage() {
               </>
             ) : (
               <div className="success-wrap">
-                <span className="success-emoji">🚗</span>
+                <span className="success-emoji"><Car size={48} color="var(--red-hot)" /></span>
                 <div className="success-h">You're on the lot!</div>
                 <p className="success-p">Setup link heading to <strong style={{ color: "var(--red-hot)" }}>{form.email}</strong>. Your first profit report will be ready before end of day.</p>
               </div>

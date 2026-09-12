@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Calculator, Package, Truck, Monitor, BarChart2, CreditCard, Users, FileText, TrendingUp, Globe, AlertTriangle, CheckCircle } from "lucide-react";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -320,19 +321,19 @@ const styles = `
 `;
 
 const mainFeatures = [
-  { icon: "🧮", title: "Recipe Costing Engine", desc: "Calculate the exact food cost and margin for every dish — down to the gram. Updates automatically when supplier prices change.", tag: "Restaurant-Specific" },
-  { icon: "📦", title: "Ingredient & Inventory Tracking", desc: "Track stock, flag low inventory, link to supplier orders. No more 86'd items that blindside a Friday service.", tag: "Saves Waste" },
-  { icon: "🧾", title: "Supplier Management", desc: "All vendors, invoices, and POs in one place. Compare prices across suppliers automatically.", tag: "Cuts Costs" },
-  { icon: "🖥️", title: "Built-in POS", desc: "Run the floor with a built-in register. Every transaction flows directly into your books — no middleware, no lag.", tag: "No Integration Needed" },
+  { icon: "calc", title: "Recipe Costing Engine", desc: "Calculate the exact food cost and margin for every dish — down to the gram. Updates automatically when supplier prices change.", tag: "Restaurant-Specific" },
+  { icon: "package", title: "Ingredient & Inventory Tracking", desc: "Track stock, flag low inventory, link to supplier orders. No more 86'd items that blindside a Friday service.", tag: "Saves Waste" },
+  { icon: "truck", title: "Supplier Management", desc: "All vendors, invoices, and POs in one place. Compare prices across suppliers automatically.", tag: "Cuts Costs" },
+  { icon: "monitor", title: "Built-in POS", desc: "Run the floor with a built-in register. Every transaction flows directly into your books — no middleware, no lag.", tag: "No Integration Needed" },
 ];
 
 const railFeatures = [
-  { icon: "📊", title: "Daily Sales Reports", desc: "Revenue, food cost %, labor %, and net margin — every day, not month-end." },
-  { icon: "💳", title: "Iris Pay Processing", desc: "Cards and mobile money at the counter. Fast payouts to your account." },
-  { icon: "🧑‍🍳", title: "Staff & Payroll", desc: "Track hours, calculate wages, run payroll — same platform." },
-  { icon: "📄", title: "Catering Invoicing", desc: "Professional invoices with logo and QR code for corporate and event clients." },
-  { icon: "📈", title: "Real-Time P&L", desc: "Profit and loss updates live as transactions happen. Know before your accountant does." },
-  { icon: "🌍", title: "Multi-Location", desc: "Multiple kitchens or cities? Consolidated reporting with per-location breakdowns." },
+  { icon: "bar-chart", title: "Daily Sales Reports", desc: "Revenue, food cost %, labor %, and net margin — every day, not month-end." },
+  { icon: "credit-card", title: "Iris Pay Processing", desc: "Cards and mobile money at the counter. Fast payouts to your account." },
+  { icon: "users", title: "Staff & Payroll", desc: "Track hours, calculate wages, run payroll — same platform." },
+  { icon: "file-text", title: "Catering Invoicing", desc: "Professional invoices with logo and QR code for corporate and event clients." },
+  { icon: "trending", title: "Real-Time P&L", desc: "Profit and loss updates live as transactions happen. Know before your accountant does." },
+  { icon: "globe", title: "Multi-Location", desc: "Multiple kitchens or cities? Consolidated reporting with per-location breakdowns." },
 ];
 
 const menuData = [
@@ -347,6 +348,18 @@ const testimonials = [
   { q: "We were using Square and QuickBooks and the data never matched. Iris Financial connects both — every sale is in the books automatically. I stopped doing weekend reconciliation.", name: "Chef Marcus B.", role: "La Maison Bistro, Chicago IL", init: "M", primary: false },
   { q: "I finally understand my food cost percentage every week, not every quarter. That visibility changed how we order, how we menu plan, everything.", name: "GM Fatima A.", role: "Spice Garden, Atlanta GA", init: "F", primary: false },
 ];
+
+
+const R_ICONS = {
+  calc: <Calculator size={20} />, package: <Package size={20} />,
+  truck: <Truck size={20} />, monitor: <Monitor size={20} />,
+  "bar-chart": <BarChart2 size={20} />, "credit-card": <CreditCard size={20} />,
+  users: <Users size={20} />, "file-text": <FileText size={20} />,
+  trending: <TrendingUp size={20} />, globe: <Globe size={20} />,
+  alert: <AlertTriangle size={16} color="var(--red-loss)" />,
+  check: <CheckCircle size={16} color="var(--green-fresh)" />,
+};
+const IconR = ({ name }) => R_ICONS[name] || null;
 
 export default function RestaurantPage() {
   const [showModal, setShowModal] = useState(false);
@@ -439,7 +452,7 @@ export default function RestaurantPage() {
                     {menuData.map((item, i) => (
                       <div className="mc-item" key={i}>
                         <div className="mc-item-left">
-                          <span className="mc-icon">{item.icon}</span>
+                          <span className="mc-icon"><IconR name={item.icon} /></span>
                           <div><div className="mc-name">{item.name}</div><div className="mc-sub">{item.cost}</div></div>
                         </div>
                         <div className={`mc-val ${item.cls}`}>{item.margin}</div>
@@ -455,14 +468,14 @@ export default function RestaurantPage() {
                 <>
                   <div className="mc-items">
                     {[
-                      { icon: "⚠️", name: "Ribeye (12oz)", sub: "3 portions left · reorder needed", val: "LOW", cls: "bad" },
-                      { icon: "✓", name: "Pasta (rigatoni)", sub: "Full stock · 4 service days", val: "OK", cls: "ok" },
-                      { icon: "⚠️", name: "Truffle Oil", sub: "2 bottles · below threshold", val: "LOW", cls: "bad" },
-                      { icon: "✓", name: "Heavy Cream", sub: "Adequate stock", val: "OK", cls: "ok" },
+                      { icon: "alert", name: "Ribeye (12oz)", sub: "3 portions left · reorder needed", val: "LOW", cls: "bad" },
+                      { icon: "check", name: "Pasta (rigatoni)", sub: "Full stock · 4 service days", val: "OK", cls: "ok" },
+                      { icon: "alert", name: "Truffle Oil", sub: "2 bottles · below threshold", val: "LOW", cls: "bad" },
+                      { icon: "check", name: "Heavy Cream", sub: "Adequate stock", val: "OK", cls: "ok" },
                     ].map((item, i) => (
                       <div className="mc-item" key={i}>
                         <div className="mc-item-left">
-                          <span className="mc-icon">{item.icon}</span>
+                          <span className="mc-icon"><IconR name={item.icon} /></span>
                           <div><div className="mc-name">{item.name}</div><div className="mc-sub">{item.sub}</div></div>
                         </div>
                         <div className={`mc-val ${item.cls}`}>{item.val}</div>
@@ -531,7 +544,7 @@ export default function RestaurantPage() {
             <div className="feat-list">
               {mainFeatures.map((f, i) => (
                 <div className="feat-row" key={i}>
-                  <div className="feat-icon">{f.icon}</div>
+                  <div className="feat-icon"><IconR name={f.icon} /></div>
                   <div><div className="feat-h">{f.title}</div><p className="feat-p">{f.desc}</p><div className="feat-tag">{f.tag}</div></div>
                 </div>
               ))}
@@ -580,7 +593,7 @@ export default function RestaurantPage() {
         <div className="rail-scroll">
           {railFeatures.map((f, i) => (
             <div className="rail-card" key={i}>
-              <span className="rail-icon">{f.icon}</span>
+              <span className="rail-icon"><IconR name={f.icon} /></span>
               <h3>{f.title}</h3>
               <p>{f.desc}</p>
             </div>
@@ -731,7 +744,7 @@ export default function RestaurantPage() {
               </>
             ) : (
               <div className="success-wrap">
-                <span className="success-emoji">🍽️</span>
+                <span className="success-emoji"><Monitor size={48} color="var(--ember-light)" /></span>
                 <div className="success-h">Welcome to the kitchen!</div>
                 <p className="success-p">Setup link heading to <strong style={{ color: "var(--ember-light)" }}>{form.email}</strong>. First food cost report ready before your next service.</p>
               </div>

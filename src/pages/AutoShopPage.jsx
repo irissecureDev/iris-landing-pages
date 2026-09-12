@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Wrench, Car, Package, Receipt, CreditCard, BarChart2, UserCheck, Bell, ShoppingCart, TrendingUp, Settings, Cog, Fuel } from "lucide-react";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@300;400;500;600&display=swap');
@@ -510,19 +511,19 @@ const workOrders = [
 ];
 
 const mainFeatures = [
-  { icon: "🔧", title: "Work Order Management", desc: "Create, assign, and track every job from intake to invoice. Techs update status from the bay in real time.", tag: "Shop-Specific" },
-  { icon: "🚗", title: "Vehicle History", desc: "Every car gets a full service record — VIN, mileage, past work, recommendations. Customers trust you more.", tag: "Retention Driver" },
-  { icon: "📦", title: "Parts Inventory Control", desc: "Track stock, set reorder alerts, link parts to work orders. Every part that leaves the shelf hits the invoice.", tag: "Profit Recovery" },
-  { icon: "🧾", title: "Service-to-Invoice", desc: "Job complete → invoice generated → sent to customer. Automatic. No manual step, no 9pm paperwork.", tag: "Saves 40 min/day" },
+  { icon: "wrench", title: "Work Order Management", desc: "Create, assign, and track every job from intake to invoice. Techs update status from the bay in real time.", tag: "Shop-Specific" },
+  { icon: "car", title: "Vehicle History", desc: "Every car gets a full service record — VIN, mileage, past work, recommendations. Customers trust you more.", tag: "Retention Driver" },
+  { icon: "package", title: "Parts Inventory Control", desc: "Track stock, set reorder alerts, link parts to work orders. Every part that leaves the shelf hits the invoice.", tag: "Profit Recovery" },
+  { icon: "receipt", title: "Service-to-Invoice", desc: "Job complete → invoice generated → sent to customer. Automatic. No manual step, no 9pm paperwork.", tag: "Saves 40 min/day" },
 ];
 
 const railFeatures = [
-  { icon: "💳", title: "Iris Pay at Counter", desc: "Card and mobile payments. Every transaction auto-posts to your books." },
-  { icon: "📊", title: "Real-Time P&L", desc: "Labor revenue, parts margin, net income — live. Not month-end." },
-  { icon: "👨‍🔧", title: "Technician Tracking", desc: "Hours per job per tech. Labor cost vs billed. See who generates margin." },
-  { icon: "📬", title: "Customer Reminders", desc: "Oil change due, inspection needed. SMS and email. Keeps bays full." },
-  { icon: "📄", title: "Supplier POs", desc: "Order parts, track delivery, auto-match to open work orders." },
-  { icon: "📈", title: "Monthly Reports", desc: "Revenue by service type, avg ticket size, tech efficiency. Accountant-ready." },
+  { icon: "credit-card", title: "Iris Pay at Counter", desc: "Card and mobile payments. Every transaction auto-posts to your books." },
+  { icon: "bar-chart", title: "Real-Time P&L", desc: "Labor revenue, parts margin, net income — live. Not month-end." },
+  { icon: "user-check", title: "Technician Tracking", desc: "Hours per job per tech. Labor cost vs billed. See who generates margin." },
+  { icon: "bell", title: "Customer Reminders", desc: "Oil change due, inspection needed. SMS and email. Keeps bays full." },
+  { icon: "cart", title: "Supplier POs", desc: "Order parts, track delivery, auto-match to open work orders." },
+  { icon: "trending", title: "Monthly Reports", desc: "Revenue by service type, avg ticket size, tech efficiency. Accountant-ready." },
 ];
 
 const testimonials = [
@@ -530,6 +531,18 @@ const testimonials = [
   { q: "Invoicing used to be the last thing we did at 9pm. Now it fires automatically when we mark a job complete. We get paid 2 days faster.", name: "Mike D.", role: "Owner — D&M Auto Repair, Phoenix AZ", init: "M", primary: false },
   { q: "4 bays, 6 techs. I can see every open WO, who's assigned, what's waiting on parts — from my phone. That visibility alone is worth it.", name: "Carlos T.", role: "Owner — Precision Auto Works, Miami FL", init: "C", primary: false },
 ];
+
+
+const A_ICONS = {
+  wrench: (s=22) => <Wrench size={s} />, car: (s=22) => <Car size={s} />,
+  package: (s=22) => <Package size={s} />, receipt: (s=22) => <Receipt size={s} />,
+  "credit-card": (s=22) => <CreditCard size={s} />, "bar-chart": (s=22) => <BarChart2 size={s} />,
+  "user-check": (s=22) => <UserCheck size={s} />, bell: (s=22) => <Bell size={s} />,
+  cart: (s=22) => <ShoppingCart size={s} />, trending: (s=22) => <TrendingUp size={s} />,
+  cog: (s=22) => <Cog size={s} />, fuel: (s=22) => <Fuel size={s} />,
+  settings: (s=22) => <Settings size={s} />,
+};
+const IconA = ({ name, size=22 }) => { const fn = A_ICONS[name]; return fn ? fn(size) : null; };
 
 export default function AutoShopPage() {
   const [showModal, setShowModal] = useState(false);
@@ -633,14 +646,14 @@ export default function AutoShopPage() {
               </div>
               <div className="wo-items">
                 {[
-                  { icon: "⚙️", name: "Transmission Fluid Flush", type: "Labor", price: "$180", isLabor: true },
-                  { icon: "🛢️", name: "Transmission Fluid 6qt", type: "Parts", price: "$94", isLabor: false },
-                  { icon: "🔩", name: "Filter Replacement", type: "Labor", price: "$65", isLabor: true },
-                  { icon: "📋", name: "Multi-Point Inspection", type: "Labor", price: "$0 — Complimentary", isLabor: true },
+                  { icon: "cog", name: "Transmission Fluid Flush", type: "Labor", price: "$180", isLabor: true },
+                  { icon: "fuel", name: "Transmission Fluid 6qt", type: "Parts", price: "$94", isLabor: false },
+                  { icon: "settings", name: "Filter Replacement", type: "Labor", price: "$65", isLabor: true },
+                  { icon: "receipt", name: "Multi-Point Inspection", type: "Labor", price: "$0 — Complimentary", isLabor: true },
                 ].map((item, i) => (
                   <div className="wo-item" key={i}>
                     <div className="wo-item-left">
-                      <div className="wo-item-icon">{item.icon}</div>
+                      <div className="wo-item-icon"><IconA name={item.icon} size={14} /></div>
                       <div>
                         <div className="wo-item-name">{item.name}</div>
                         <div className="wo-item-type">{item.type}</div>
@@ -723,7 +736,7 @@ export default function AutoShopPage() {
             <div className="feat-list">
               {mainFeatures.map((f, i) => (
                 <div className="feat-row" key={i}>
-                  <div className="feat-icon">{f.icon}</div>
+                  <div className="feat-icon"><IconA name={f.icon} /></div>
                   <div>
                     <div className="feat-h">{f.title}</div>
                     <p className="feat-p">{f.desc}</p>
@@ -774,7 +787,7 @@ export default function AutoShopPage() {
         <div className="rail-scroll">
           {railFeatures.map((f, i) => (
             <div className="rail-card" key={i}>
-              <span className="rail-card-icon">{f.icon}</span>
+              <span className="rail-card-icon"><IconA name={f.icon} /></span>
               <h3>{f.title}</h3>
               <p>{f.desc}</p>
             </div>
@@ -935,7 +948,7 @@ export default function AutoShopPage() {
               </>
             ) : (
               <div className="success-wrap">
-                <span className="success-emoji">🔧</span>
+                <span className="success-emoji"><Wrench size={48} color="var(--yellow)" /></span>
                 <div className="success-h">Shop's open!</div>
                 <p className="success-p">Setup link heading to <strong style={{ color: "var(--yellow)" }}>{form.email}</strong>. You'll be tracking work orders before end of day.</p>
               </div>

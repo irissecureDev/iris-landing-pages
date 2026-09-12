@@ -1,4 +1,5 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
+import { Users, PieChart, FileText, ClipboardList, CreditCard, BarChart2, Sheet, DollarSign, Mail } from "lucide-react";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Lato:wght@300;400;700&display=swap');
@@ -432,18 +433,18 @@ const styles = `
 `;
 
 const features = [
-  { icon: "🙏", title: "Donor Management", desc: "Complete donor profiles with full giving history, notes, and contact records — all in one place.", tag: "Church-Specific" },
-  { icon: "📊", title: "Dedicated Fund Tracking", desc: "Separate funds for tithes, building projects, missions, and benevolence with automatic allocation.", tag: "Church-Specific" },
-  { icon: "📄", title: "Year-End Giving Statements", desc: "IRS-compliant tax receipts generated and emailed to every donor in one click. Every January.", tag: "Saves Hours" },
-  { icon: "📋", title: "IRS Form 990 Prep", desc: "Pre-populated 990 and 990-EZ data exports. Your accountant will thank you.", tag: "Tax Ready" },
-  { icon: "💳", title: "Online & Mobile Giving", desc: "Accept tithes and offerings via card or mobile money. Donors give from the pew or anywhere.", tag: "Iris Pay" },
-  { icon: "📈", title: "Financial Reports", desc: "P&L, giving trends, fund balances, and expense breakdowns — church-board ready.", tag: "Bilingual" },
+  { icon: "users", title: "Donor Management", desc: "Complete donor profiles with full giving history, notes, and contact records — all in one place.", tag: "Church-Specific" },
+  { icon: "pie-chart", title: "Dedicated Fund Tracking", desc: "Separate funds for tithes, building projects, missions, and benevolence with automatic allocation.", tag: "Church-Specific" },
+  { icon: "file-text", title: "Year-End Giving Statements", desc: "IRS-compliant tax receipts generated and emailed to every donor in one click. Every January.", tag: "Saves Hours" },
+  { icon: "clipboard", title: "IRS Form 990 Prep", desc: "Pre-populated 990 and 990-EZ data exports. Your accountant will thank you.", tag: "Tax Ready" },
+  { icon: "credit-card", title: "Online & Mobile Giving", desc: "Accept tithes and offerings via card or mobile money. Donors give from the pew or anywhere.", tag: "Iris Pay" },
+  { icon: "bar-chart", title: "Financial Reports", desc: "P&L, giving trends, fund balances, and expense breakdowns — church-board ready.", tag: "Bilingual" },
 ];
 
 const painPoints = [
-  { icon: "📑", title: "Spreadsheets break every year", desc: "Your treasurer updates the same Excel file for 10 years and then they leave. That's not a system.", strike: null },
-  { icon: "💰", title: "QuickBooks wasn't built for churches", desc: "No donor management. No fund tracking. No giving statements. You're paying $115/mo for the wrong tool.", strike: "~$1,380/yr wasted" },
-  { icon: "📬", title: "Year-end chaos", desc: "Hunting down donor records in January to generate tax receipts shouldn't take two weeks.", strike: null },
+  { icon: "sheet", title: "Spreadsheets break every year", desc: "Your treasurer updates the same Excel file for 10 years and then they leave. That's not a system.", strike: null },
+  { icon: "dollar", title: "QuickBooks wasn't built for churches", desc: "No donor management. No fund tracking. No giving statements. You're paying $115/mo for the wrong tool.", strike: "~$1,380/yr wasted" },
+  { icon: "mail", title: "Year-end chaos", desc: "Hunting down donor records in January to generate tax receipts shouldn't take two weeks.", strike: null },
 ];
 
 const testimonials = [
@@ -463,6 +464,15 @@ const priceFeatures = [
   "Unlimited users (admins + volunteers)",
   "15-day free trial — no credit card",
 ];
+
+
+const CHURCH_ICONS = {
+  users: <Users size={24} />, "pie-chart": <PieChart size={24} />,
+  "file-text": <FileText size={24} />, clipboard: <ClipboardList size={24} />,
+  "credit-card": <CreditCard size={24} />, "bar-chart": <BarChart2 size={24} />,
+  sheet: <Sheet size={24} />, dollar: <DollarSign size={24} />, mail: <Mail size={24} />,
+};
+const IconC = ({ name }) => CHURCH_ICONS[name] || null;
 
 export default function ChurchLandingPage() {
   const [showModal, setShowModal] = useState(false);
@@ -552,7 +562,7 @@ export default function ChurchLandingPage() {
           <div className="pain-grid">
             {painPoints.map((p, i) => (
               <div className="pain-card" key={i}>
-                <div className="pain-icon">{p.icon}</div>
+                <div className="pain-icon"><IconC name={p.icon} /></div>
                 <h3>{p.title}</h3>
                 <p>{p.desc}</p>
                 {p.strike && <p style={{ marginTop: 12 }} className="strike">→ {p.strike}</p>}
@@ -574,7 +584,7 @@ export default function ChurchLandingPage() {
           <div className="features-grid">
             {features.map((f, i) => (
               <div className="feature-card" key={i}>
-                <div className="feature-icon-wrap">{f.icon}</div>
+                <div className="feature-icon-wrap"><IconC name={f.icon} /></div>
                 <h3>{f.title}</h3>
                 <p>{f.desc}</p>
                 <div className="feature-tag">{f.tag}</div>
@@ -681,7 +691,7 @@ export default function ChurchLandingPage() {
       {/* CTA BANNER */}
       <section className="cta-banner">
         <div className="cta-inner">
-          <div className="cta-icon">✝</div>
+          <div className="cta-icon" style={{fontSize:56}}>✝</div>
           <h2 className="cta-title">Your congregation deserves<br /><em>financial clarity.</em></h2>
           <p className="cta-sub">Join hundreds of churches that replaced spreadsheets and the wrong software with a platform actually built for them. Free to start. No credit card. 15 minutes to set up.</p>
           <div className="cta-actions">
@@ -738,7 +748,7 @@ export default function ChurchLandingPage() {
               </>
             ) : (
               <div className="form-success">
-                <div className="success-icon">🙏</div>
+                <div className="success-icon"><Users size={48} color="var(--teal)" /></div>
                 <h3>You're on your way!</h3>
                 <p>We'll send your account setup link to <strong>{formState.email}</strong> within minutes. Welcome to Iris Financial.</p>
               </div>
