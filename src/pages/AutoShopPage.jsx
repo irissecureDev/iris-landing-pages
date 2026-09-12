@@ -777,8 +777,7 @@ export default function AutoShopLandingPage() {
       {/* NAV */}
       <nav className="nav">
         <div className="nav-logo">
-          <div className="nav-logo-mark">I</div>
-          <div className="nav-wordmark">Iris <span>Financial</span></div>
+          <img src="/media/image/logo.png" alt="Iris Financial" style={{ height: "36px", width: "auto" }} />
         </div>
         <div className="nav-center">
           <span className="nav-item">Features</span>

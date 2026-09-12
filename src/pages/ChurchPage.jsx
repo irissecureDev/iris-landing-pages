@@ -502,8 +502,7 @@ export default function ChurchLandingPage() {
       {/* NAV */}
       <nav className="nav">
         <div className="nav-logo">
-          <div className="nav-logo-mark">I</div>
-          <div className="nav-brand">Iris <span>Financial</span></div>
+          <img src="/media/image/logo.png" alt="Iris Financial" style={{ height: "36px", width: "auto" }} />
         </div>
         <button className="nav-cta" onClick={() => setShowModal(true)}>Start Free</button>
       </nav>

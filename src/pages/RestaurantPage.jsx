@@ -642,8 +642,7 @@ export default function RestaurantLandingPage() {
       {/* NAV */}
       <nav className="nav">
         <div className="nav-left">
-          <div className="nav-logo-wrap">I</div>
-          <div className="nav-wordmark">Iris <span>Financial</span></div>
+          <img src="/media/image/logo.png" alt="Iris Financial" style={{ height: "36px", width: "auto" }} />
         </div>
         <div className="nav-right">
           <span className="nav-link">Features</span>
