@@ -699,9 +699,25 @@ export default function BakeryLandingPage() {
     return () => document.head.removeChild(el);
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.name || !form.email) return;
+    try {
+      await fetch("https://formspree.io/f/xdeovvql", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          bakery: form.bakery,
+          email: form.email,
+          bakery_type: form.type,
+          vertical: "Bakery",
+        }),
+      });
+    } catch (e) {}
     setSubmitted(true);
+    setTimeout(() => {
+      window.location.href = "https://irisfinancial.tech/auth/signup?vertical=bakery&ref=landing";
+    }, 2000);
   };
 
   const scentItems = [
