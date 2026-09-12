@@ -616,9 +616,25 @@ export default function RestaurantLandingPage() {
     return () => document.head.removeChild(el);
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.name || !form.email) return;
+    try {
+      await fetch("https://formspree.io/f/xwlkjjgv", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          restaurant: form.restaurant,
+          email: form.email,
+          restaurant_type: form.type,
+          vertical: "Restaurant",
+        }),
+      });
+    } catch (e) {}
     setSubmitted(true);
+    setTimeout(() => {
+      window.location.href = "https://irisfinancial.tech/auth/signup?vertical=restaurant&ref=landing";
+    }, 2000);
   };
 
   return (
