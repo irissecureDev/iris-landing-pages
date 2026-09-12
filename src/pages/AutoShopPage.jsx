@@ -744,9 +744,25 @@ export default function AutoShopLandingPage() {
     return () => document.head.removeChild(el);
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.name || !form.email) return;
+    try {
+      await fetch("https://formspree.io/f/xnpqyyev", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          shop: form.shop,
+          email: form.email,
+          number_of_bays: form.bays,
+          vertical: "Auto Shop",
+        }),
+      });
+    } catch (e) {}
     setSubmitted(true);
+    setTimeout(() => {
+      window.location.href = "https://irisfinancial.tech/auth/signup?vertical=autoshop&ref=landing";
+    }, 2000);
   };
 
   const tickerContent = [
