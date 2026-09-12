@@ -476,9 +476,25 @@ export default function ChurchLandingPage() {
     return () => document.head.removeChild(el);
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formState.name || !formState.email) return;
+    try {
+      await fetch("https://formspree.io/f/xkjnaadn", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify({
+          name: formState.name,
+          church: formState.church,
+          email: formState.email,
+          congregation_size: formState.size,
+          vertical: "Church",
+        }),
+      });
+    } catch (e) {}
     setSubmitted(true);
+    setTimeout(() => {
+      window.location.href = "https://irisfinancial.tech/auth/signup?vertical=church&ref=landing";
+    }, 2000);
   };
 
   return (
