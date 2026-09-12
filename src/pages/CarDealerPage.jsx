@@ -699,7 +699,7 @@ export default function CarDealerPage() {
   const handleSubmit = async () => {
     if (!form.name || !form.email) return;
     try {
-      await fetch("https://formspree.io/f/xkjnaadn", {
+      await fetch("https://formspree.io/f/mdeovrbe", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({
@@ -727,8 +727,7 @@ export default function CarDealerPage() {
     <div>
       <nav className="nav">
         <div className="nav-left">
-          <div className="nav-mark">I</div>
-          <div className="nav-name">Iris <span>Financial</span></div>
+          <img src="/media/image/logo.png" alt="Iris Financial" style={{ height: "36px", width: "auto" }} />
         </div>
         <div className="nav-links">
           <span className="nav-lnk">Features</span>
