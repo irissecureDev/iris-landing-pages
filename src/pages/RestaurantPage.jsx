@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const styles = `
   @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -8,7 +8,8 @@ const styles = `
   :root {
     --black: #0D0A07;
     --char: #1A1410;
-    --brown: #2C1A0E;
+    --panel: #201610;
+    --border: rgba(255,255,255,0.07);
     --ember: #C4501A;
     --ember-light: #E8723A;
     --amber: #D4960A;
@@ -24,590 +25,334 @@ const styles = `
   html { scroll-behavior: smooth; }
   body { font-family: 'DM Sans', sans-serif; background: var(--black); color: var(--cream); overflow-x: hidden; }
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes flicker {
-    0%, 100% { opacity: 1; } 50% { opacity: 0.85; } 75% { opacity: 0.95; }
-  }
-  @keyframes shimmer {
-    0% { background-position: -200% center; }
-    100% { background-position: 200% center; }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0) rotate(-2deg); }
-    50% { transform: translateY(-10px) rotate(2deg); }
-  }
-  @keyframes scaleIn {
-    from { opacity: 0; transform: scale(0.94); }
-    to { opacity: 1; transform: scale(1); }
-  }
-  @keyframes ticker {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  @keyframes pulse {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(196,80,26,0.5); }
-    50% { box-shadow: 0 0 0 12px rgba(196,80,26,0); }
-  }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes scaleIn { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+  @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(196,80,26,0.4); } 50% { box-shadow: 0 0 0 12px rgba(196,80,26,0); } }
+  @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
   /* NAV */
   .nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-    padding: 0 48px;
+    height: 62px; padding: 0 48px;
+    background: rgba(13,10,7,0.97); backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
     display: flex; align-items: center; justify-content: space-between;
-    height: 68px;
-    background: rgba(13,10,7,0.92);
-    backdrop-filter: blur(16px);
-    border-bottom: 1px solid rgba(196,80,26,0.15);
   }
-  .nav-left { display: flex; align-items: center; gap: 12px; }
-  .nav-logo-wrap {
-    width: 38px; height: 38px; border-radius: 8px;
-    background: linear-gradient(135deg, var(--ember), #8B2200);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Cormorant Garamond', serif; font-weight: 700;
-    color: white; font-size: 18px;
-    box-shadow: 0 4px 16px rgba(196,80,26,0.35);
-  }
-  .nav-wordmark {
-    font-family: 'Cormorant Garamond', serif; font-weight: 600;
-    font-size: 20px; color: var(--cream); letter-spacing: 0.01em;
-  }
-  .nav-wordmark span { color: var(--ember-light); }
-  .nav-right { display: flex; align-items: center; gap: 20px; }
-  .nav-link { color: var(--warm-gray); font-size: 13px; font-weight: 500; cursor: pointer; transition: color 0.2s; letter-spacing: 0.03em; }
-  .nav-link:hover { color: var(--cream); }
-  .nav-btn {
-    background: var(--ember); color: white; padding: 9px 22px;
-    border-radius: 6px; font-size: 13px; font-weight: 600;
-    cursor: pointer; border: none; letter-spacing: 0.04em;
-    text-transform: uppercase; transition: all 0.2s;
-  }
-  .nav-btn:hover { background: var(--ember-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(196,80,26,0.4); }
+  .nav-left { display: flex; align-items: center; gap: 10px; }
+  .nav-links { display: flex; gap: 32px; }
+  .nav-lnk { font-size: 13px; font-weight: 500; color: var(--warm-gray); cursor: pointer; transition: color 0.2s; }
+  .nav-lnk:hover { color: var(--cream); }
+  .nav-cta { background: var(--ember); color: white; padding: 9px 22px; border-radius: 4px; border: none; cursor: pointer; font-size: 13px; font-weight: 600; letter-spacing: 0.04em; transition: all 0.2s; }
+  .nav-cta:hover { background: var(--ember-light); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(196,80,26,0.4); }
 
-  /* TICKER */
-  .ticker {
-    position: fixed; top: 68px; left: 0; right: 0; z-index: 199;
-    background: var(--ember); height: 36px;
-    display: flex; align-items: center; overflow: hidden;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+  /* SERVICE BAR — replaces ticker */
+  .service-bar {
+    position: fixed; top: 62px; left: 0; right: 0; z-index: 199;
+    height: 34px; background: var(--panel);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    gap: 0;
   }
-  .ticker-inner {
-    display: flex; white-space: nowrap;
-    animation: ticker 30s linear infinite;
+  .sb-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 28px; border-right: 1px solid var(--border);
+    font-size: 12px; color: var(--warm-gray);
   }
-  .ticker-item {
-    padding: 0 32px; font-size: 12px; font-weight: 600;
-    color: white; letter-spacing: 0.08em; text-transform: uppercase;
-    display: flex; align-items: center; gap: 16px;
-  }
-  .ticker-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.5); }
+  .sb-item:last-child { border-right: none; }
+  .sb-val { color: var(--amber-light); font-weight: 600; }
+  .sb-live { display: flex; align-items: center; gap: 6px; }
+  .sb-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green-fresh); animation: blink 2s infinite; }
 
   /* HERO */
   .hero {
-    min-height: 100vh;
-    background: var(--black);
-    position: relative; overflow: hidden;
+    min-height: 100vh; background: var(--black);
+    padding: 118px 48px 80px; position: relative; overflow: hidden;
     display: flex; align-items: center;
-    padding: 140px 48px 80px;
   }
-  .hero-texture {
-    position: absolute; inset: 0; opacity: 0.03;
-    background-image:
-      repeating-linear-gradient(45deg, rgba(255,255,255,0.5) 0, rgba(255,255,255,0.5) 1px, transparent 0, transparent 50%);
-    background-size: 20px 20px;
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 52px 52px;
   }
-  .hero-glow-left {
-    position: absolute; left: -200px; top: 20%; width: 600px; height: 600px;
-    background: radial-gradient(circle, rgba(196,80,26,0.12) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .hero-glow-right {
-    position: absolute; right: -100px; bottom: 10%; width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(212,150,10,0.07) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .hero-layout {
-    position: relative; z-index: 2;
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
-    max-width: 1200px; margin: 0 auto; width: 100%;
-  }
-  .hero-badge {
-    display: inline-flex; align-items: center; gap: 8px;
-    background: rgba(196,80,26,0.15); border: 1px solid rgba(196,80,26,0.35);
-    color: var(--ember-light); padding: 6px 16px; border-radius: 4px;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; margin-bottom: 28px;
-    animation: fadeUp 0.6s ease both;
-  }
-  .hero-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(48px, 5.5vw, 76px);
-    font-weight: 700; line-height: 1.05;
-    color: var(--cream); margin-bottom: 24px;
-    animation: fadeUp 0.7s 0.1s ease both;
-  }
+  .hero-glow { position: absolute; right: -200px; top: 50%; transform: translateY(-50%); width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(196,80,26,0.07) 0%, transparent 65%); pointer-events: none; }
+  .hero-layout { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; gap: 72px; max-width: 1200px; margin: 0 auto; width: 100%; align-items: center; }
+  .hero-label { font-size: 12px; font-weight: 600; letter-spacing: 0.12em; color: var(--ember-light); margin-bottom: 22px; animation: fadeUp 0.5s ease both; }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 6.5vw, 86px); font-weight: 700; line-height: 0.95; color: var(--cream); margin-bottom: 24px; animation: fadeUp 0.6s 0.1s ease both; }
   .hero-title em { font-style: italic; color: var(--ember-light); }
   .hero-title .amber { color: var(--amber-light); }
-  .hero-sub {
-    font-size: 17px; line-height: 1.75; color: var(--text-light);
-    margin-bottom: 40px; font-weight: 300; max-width: 480px;
-    animation: fadeUp 0.7s 0.2s ease both;
-  }
-  .hero-actions {
-    display: flex; gap: 14px; flex-wrap: wrap;
-    animation: fadeUp 0.7s 0.3s ease both;
-  }
-  .btn-fire {
-    background: var(--ember); color: white;
-    padding: 16px 36px; border-radius: 6px;
-    font-weight: 600; font-size: 14px; cursor: pointer; border: none;
-    letter-spacing: 0.04em; text-transform: uppercase;
-    transition: all 0.25s; animation: pulse 2.5s infinite;
-  }
-  .btn-fire:hover { background: var(--ember-light); transform: translateY(-2px); box-shadow: 0 12px 36px rgba(196,80,26,0.45); }
-  .btn-ghost {
-    background: transparent; color: var(--cream);
-    padding: 16px 36px; border-radius: 6px;
-    font-weight: 500; font-size: 14px; cursor: pointer;
-    border: 1px solid rgba(255,255,255,0.15); transition: all 0.25s;
-  }
+  .hero-sub { font-size: 16px; color: var(--warm-gray); line-height: 1.75; font-weight: 300; max-width: 460px; margin-bottom: 40px; animation: fadeUp 0.6s 0.2s ease both; }
+  .hero-actions { display: flex; gap: 14px; animation: fadeUp 0.6s 0.3s ease both; }
+  .btn-ember { background: var(--ember); color: white; padding: 15px 36px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; font-size: 14px; letter-spacing: 0.03em; transition: all 0.25s; animation: pulse 2.5s infinite; }
+  .btn-ember:hover { background: var(--ember-light); transform: translateY(-2px); box-shadow: 0 12px 36px rgba(196,80,26,0.45); }
+  .btn-ghost { background: transparent; color: var(--cream); padding: 13px 30px; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; font-weight: 500; font-size: 14px; transition: all 0.25s; }
   .btn-ghost:hover { border-color: var(--amber); color: var(--amber-light); }
-  .hero-proof {
-    display: flex; gap: 36px; margin-top: 52px; padding-top: 36px;
-    border-top: 1px solid rgba(255,255,255,0.07);
-    animation: fadeUp 0.7s 0.4s ease both;
-  }
-  .proof-item .proof-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px; font-weight: 700; color: var(--amber-light); line-height: 1;
-  }
-  .proof-item .proof-label { font-size: 12px; color: var(--warm-gray); margin-top: 4px; }
 
-  /* HERO RIGHT — RECEIPT CARD */
-  .hero-right {
-    animation: scaleIn 0.8s 0.3s ease both;
-    position: relative;
-  }
-  .receipt-card {
-    background: var(--char); border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.07);
-    overflow: hidden; box-shadow: 0 40px 80px rgba(0,0,0,0.6);
-  }
-  .receipt-header {
-    background: var(--brown); padding: 20px 28px;
-    display: flex; align-items: center; justify-content: space-between;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-  .receipt-title { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; color: var(--cream); }
-  .receipt-live { display: flex; align-items: center; gap: 6px; }
-  .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green-fresh); animation: pulse 2s infinite; }
-  .live-text { font-size: 11px; color: var(--green-fresh); font-weight: 600; letter-spacing: 0.06em; }
-  .receipt-body { padding: 24px 28px; }
-  .receipt-row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-  }
-  .receipt-row:last-child { border-bottom: none; }
-  .receipt-label { font-size: 13px; color: var(--warm-gray); display: flex; align-items: center; gap: 8px; }
-  .receipt-label .dot { width: 6px; height: 6px; border-radius: 50%; }
-  .receipt-val { font-size: 14px; font-weight: 600; color: var(--cream); font-family: 'Cormorant Garamond', serif; font-size: 16px; }
-  .receipt-val.green { color: var(--green-fresh); }
-  .receipt-val.red { color: var(--red-loss); }
-  .receipt-val.amber { color: var(--amber-light); }
-  .receipt-footer {
-    background: rgba(196,80,26,0.08); border-top: 1px solid rgba(196,80,26,0.15);
-    padding: 18px 28px; display: flex; align-items: center; justify-content: space-between;
-  }
-  .receipt-footer-label { font-size: 12px; color: var(--text-light); }
-  .receipt-footer-val {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px; font-weight: 700; color: var(--amber-light);
-  }
-  .receipt-tabs { display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .receipt-tab {
-    flex: 1; padding: 12px; text-align: center; font-size: 12px;
-    font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase;
-    cursor: pointer; transition: all 0.2s; color: var(--warm-gray);
-    border-bottom: 2px solid transparent;
-  }
-  .receipt-tab.active { color: var(--ember-light); border-bottom-color: var(--ember); }
-  .receipt-badge-row { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
-  .r-badge {
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);
-    color: var(--text-light); padding: 5px 12px; border-radius: 4px;
-    font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
-  }
-  .r-badge.hot { background: rgba(196,80,26,0.12); border-color: rgba(196,80,26,0.25); color: var(--ember-light); }
+  /* HERO RIGHT: MENU CARD */
+  .hero-right { animation: scaleIn 0.7s 0.35s ease both; }
+  .menu-card { background: var(--char); border: 1px solid var(--border); border-top: 2px solid var(--ember); border-radius: 4px; overflow: hidden; box-shadow: 0 32px 64px rgba(0,0,0,0.7); }
+  .mc-head { background: var(--panel); padding: 13px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .mc-head-title { font-family: 'Cormorant Garamond', serif; font-size: 15px; font-weight: 600; color: var(--cream); }
+  .mc-live { display: flex; align-items: center; gap: 6px; }
+  .mc-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-fresh); animation: pulse 2s infinite; }
+  .mc-live-txt { font-size: 11px; color: var(--green-fresh); font-weight: 600; letter-spacing: 0.06em; }
+  .mc-tabs { display: flex; border-bottom: 1px solid var(--border); }
+  .mc-tab { flex: 1; padding: 11px; text-align: center; font-size: 12px; font-weight: 600; letter-spacing: 0.05em; cursor: pointer; transition: all 0.2s; color: var(--warm-gray); border-bottom: 2px solid transparent; }
+  .mc-tab.active { color: var(--ember-light); border-bottom-color: var(--ember); }
+  .mc-items { padding: 0 20px; }
+  .mc-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .mc-item:last-child { border-bottom: none; }
+  .mc-item-left { display: flex; align-items: center; gap: 10px; }
+  .mc-icon { font-size: 20px; }
+  .mc-name { font-size: 14px; font-weight: 600; color: var(--cream); }
+  .mc-sub { font-size: 11px; color: var(--warm-gray); margin-top: 1px; }
+  .mc-val { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; }
+  .mc-val.good { color: var(--green-fresh); }
+  .mc-val.bad { color: var(--red-loss); }
+  .mc-footer { background: var(--panel); padding: 14px 20px; border-top: 2px solid var(--ember); display: flex; align-items: center; justify-content: space-between; }
+  .mc-footer-lbl { font-size: 12px; color: var(--warm-gray); font-weight: 500; letter-spacing: 0.04em; }
+  .mc-footer-val { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; color: var(--amber-light); }
 
-  /* PAIN */
-  .pain { background: var(--char); padding: 100px 48px; }
-  .pain-inner { max-width: 1100px; margin: 0 auto; }
-  .section-eyebrow {
-    font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--ember); margin-bottom: 14px;
-  }
-  .section-heading {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(36px, 4vw, 54px); font-weight: 700;
-    line-height: 1.1; color: var(--cream); margin-bottom: 16px;
-  }
-  .section-heading em { font-style: italic; color: var(--ember-light); }
-  .section-body { font-size: 17px; color: var(--warm-gray); line-height: 1.7; max-width: 580px; font-weight: 300; }
-  .pain-grid {
-    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-    margin-top: 56px; border-radius: 16px; overflow: hidden;
-  }
-  .pain-item {
-    background: rgba(255,255,255,0.02); padding: 40px 32px;
-    transition: background 0.3s; cursor: default;
-    border: 1px solid rgba(255,255,255,0.04);
-  }
-  .pain-item:hover { background: rgba(196,80,26,0.05); border-color: rgba(196,80,26,0.15); }
-  .pain-num {
-    font-family: 'Cormorant Garamond', serif; font-size: 56px;
-    font-weight: 700; color: rgba(196,80,26,0.18); line-height: 1;
-    margin-bottom: 16px;
-  }
-  .pain-item h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--cream); margin-bottom: 12px; }
-  .pain-item p { font-size: 14px; color: var(--warm-gray); line-height: 1.65; }
-  .pain-callout {
-    background: rgba(196,80,26,0.08); border: 1px solid rgba(196,80,26,0.2);
-    border-radius: 12px; padding: 20px 28px; margin-top: 40px;
-    display: flex; align-items: center; gap: 16px;
-  }
-  .pain-callout-icon { font-size: 28px; }
-  .pain-callout p { font-size: 15px; color: var(--cream); line-height: 1.6; }
-  .pain-callout strong { color: var(--ember-light); }
+  /* PAIN — FULL-BLEED SPLIT */
+  .pain { background: var(--char); padding: 0; border-top: 1px solid var(--border); }
+  .pain-top { display: grid; grid-template-columns: 1fr 1fr; }
+  .pain-left { padding: 80px 56px 80px 48px; border-right: 1px solid var(--border); }
+  .pain-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: var(--ember); margin-bottom: 20px; }
+  .pain-headline { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4.5vw, 56px); font-weight: 700; line-height: 1.05; color: var(--cream); margin-bottom: 24px; }
+  .pain-headline em { font-style: italic; color: var(--ember-light); }
+  .pain-deck { font-size: 16px; color: var(--warm-gray); line-height: 1.8; font-weight: 300; margin-bottom: 40px; }
+  .pain-dish { background: rgba(196,80,26,0.06); border: 1px solid rgba(196,80,26,0.15); padding: 24px; }
+  .pain-dish-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: var(--ember); margin-bottom: 14px; }
+  .pain-dish-name { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 16px; }
+  .pain-dish-row { display: flex; justify-content: space-between; align-items: baseline; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+  .pain-dish-row:last-child { border-bottom: none; }
+  .pain-dish-desc { color: var(--warm-gray); }
+  .pain-dish-val { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; }
+  .pain-dish-val.red { color: var(--red-loss); }
+  .pain-dish-val.cream { color: var(--cream); }
+  .pain-dish-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; padding-top: 12px; border-top: 2px solid rgba(196,80,26,0.3); }
+  .pain-dish-total-lbl { font-size: 14px; font-weight: 600; color: var(--warm-gray); }
+  .pain-dish-total-val { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 700; color: var(--amber-light); }
+
+  .pain-right { padding: 80px 48px 80px 40px; display: flex; flex-direction: column; gap: 40px; justify-content: center; }
+  .pain-issue { padding-bottom: 40px; border-bottom: 1px solid var(--border); }
+  .pain-issue:last-child { padding-bottom: 0; border-bottom: none; }
+  .pain-issue-emoji { font-size: 28px; margin-bottom: 14px; display: block; }
+  .pain-issue h3 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--cream); margin-bottom: 10px; }
+  .pain-issue p { font-size: 14px; color: var(--warm-gray); line-height: 1.7; }
 
   /* FEATURES */
-  .features { background: var(--black); padding: 100px 48px; }
+  .features { background: var(--black); padding: 100px 48px; border-top: 1px solid var(--border); }
   .features-inner { max-width: 1200px; margin: 0 auto; }
-  .features-top {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
-    align-items: center; margin-bottom: 80px;
-  }
-  .features-visual {
-    background: var(--char); border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.06); overflow: hidden;
-    box-shadow: 0 32px 64px rgba(0,0,0,0.5);
-  }
-  .vis-header {
-    background: var(--brown); padding: 16px 24px;
-    display: flex; align-items: center; gap: 8px;
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-  }
-  .vis-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .vis-title { font-size: 13px; color: var(--warm-gray); margin-left: 8px; font-weight: 500; }
-  .vis-body { padding: 24px; }
-  .vis-menu-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 14px 16px; border-radius: 10px; margin-bottom: 8px;
-    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.04);
-    transition: all 0.2s; cursor: default;
-  }
-  .vis-menu-item:hover { background: rgba(196,80,26,0.08); border-color: rgba(196,80,26,0.2); }
-  .vis-item-left { display: flex; align-items: center; gap: 12px; }
-  .vis-item-icon {
-    width: 36px; height: 36px; border-radius: 8px;
-    background: rgba(196,80,26,0.15); display: flex; align-items: center; justify-content: center; font-size: 16px;
-  }
-  .vis-item-name { font-size: 14px; color: var(--cream); font-weight: 500; }
-  .vis-item-sub { font-size: 11px; color: var(--warm-gray); margin-top: 2px; }
-  .vis-item-cost { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; color: var(--amber-light); }
-  .vis-item-cost.red { color: var(--red-loss); }
-  .vis-footer-bar {
-    margin-top: 16px; padding: 14px 16px;
-    background: rgba(212,150,10,0.08); border-radius: 10px;
-    border: 1px solid rgba(212,150,10,0.2);
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .vis-footer-label { font-size: 12px; color: var(--amber); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
-  .vis-footer-val { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 700; color: var(--amber-light); }
+  .s-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: var(--ember); margin-bottom: 14px; }
+  .s-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 4.5vw, 54px); font-weight: 700; line-height: 1.05; color: var(--cream); margin-bottom: 14px; }
+  .s-title em { font-style: italic; color: var(--ember-light); }
+  .s-body { font-size: 16px; color: var(--warm-gray); line-height: 1.75; font-weight: 300; max-width: 540px; }
+  .features-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; margin-top: 60px; }
+  .feat-list { display: grid; gap: 4px; }
+  .feat-row { display: flex; gap: 16px; padding: 20px 22px; background: var(--char); border: 1px solid var(--border); border-radius: 3px; transition: all 0.25s; }
+  .feat-row:hover { background: var(--panel); border-left: 3px solid var(--ember); padding-left: 20px; }
+  .feat-icon { width: 42px; height: 42px; border-radius: 4px; flex-shrink: 0; background: rgba(196,80,26,0.1); border: 1px solid rgba(196,80,26,0.2); display: flex; align-items: center; justify-content: center; font-size: 19px; }
+  .feat-h { font-family: 'Cormorant Garamond', serif; font-size: 19px; font-weight: 700; color: var(--cream); margin-bottom: 6px; }
+  .feat-p { font-size: 13px; color: var(--warm-gray); line-height: 1.6; }
+  .feat-tag { display: inline-block; margin-top: 7px; background: rgba(196,80,26,0.08); border: 1px solid rgba(196,80,26,0.2); color: var(--ember-light); padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: 600; letter-spacing: 0.08em; }
 
-  .features-list { display: grid; grid-template-columns: 1fr; gap: 4px; }
-  .feature-row {
-    display: flex; gap: 20px; padding: 24px 28px;
-    border-radius: 12px; transition: all 0.25s; cursor: default;
-    border: 1px solid transparent;
-  }
-  .feature-row:hover { background: rgba(255,255,255,0.03); border-color: rgba(196,80,26,0.15); }
-  .feat-icon-wrap {
-    width: 48px; height: 48px; border-radius: 10px; flex-shrink: 0;
-    background: rgba(196,80,26,0.1); border: 1px solid rgba(196,80,26,0.2);
-    display: flex; align-items: center; justify-content: center; font-size: 22px;
-  }
-  .feat-content h4 { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--cream); margin-bottom: 6px; }
-  .feat-content p { font-size: 13px; color: var(--warm-gray); line-height: 1.65; }
-  .feat-tag {
-    display: inline-block; margin-top: 8px;
-    background: rgba(212,150,10,0.1); border: 1px solid rgba(212,150,10,0.2);
-    color: var(--amber-light); padding: 3px 10px; border-radius: 4px;
-    font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-  }
+  /* MENU ANALYSIS MOCKUP */
+  .mockup { background: var(--char); border: 1px solid var(--border); border-top: 2px solid var(--ember); border-radius: 4px; overflow: hidden; box-shadow: 0 24px 56px rgba(0,0,0,0.6); }
+  .mockup-top { background: var(--panel); padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+  .mockup-title { font-size: 13px; font-weight: 500; color: var(--warm-gray); letter-spacing: 0.04em; }
+  .mockup-live { display: flex; align-items: center; gap: 6px; }
+  .m-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-fresh); animation: pulse 2s infinite; }
+  .m-live { font-size: 11px; color: var(--green-fresh); font-weight: 600; letter-spacing: 0.06em; }
+  .mockup-metrics { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--border); }
+  .mm { padding: 14px 16px; border-right: 1px solid var(--border); }
+  .mm:last-child { border-right: none; }
+  .mm-lbl { font-size: 10px; color: var(--warm-gray); font-weight: 500; letter-spacing: 0.08em; margin-bottom: 5px; }
+  .mm-val { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; color: var(--amber-light); }
+  .mm-val.cream { color: var(--cream); }
+  .mm-val.green { color: var(--green-fresh); }
+  .mm-delta { font-size: 11px; color: var(--green-fresh); margin-top: 2px; }
+  .mockup-rows { padding: 0 4px; }
+  .m-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 16px; border-bottom: 1px solid rgba(255,255,255,0.03); border-radius: 3px; transition: background 0.15s; }
+  .m-row:hover { background: rgba(255,255,255,0.02); }
+  .m-row-left { display: flex; align-items: center; gap: 10px; }
+  .m-dish { font-size: 14px; font-weight: 500; color: var(--cream); }
+  .m-cost { font-size: 11px; color: var(--warm-gray); margin-top: 1px; }
+  .m-margin { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; }
+  .m-margin.ok { color: var(--green-fresh); }
+  .m-margin.warn { color: var(--amber-light); }
+  .m-margin.bad { color: var(--red-loss); }
+  .mockup-foot { background: var(--panel); padding: 12px 20px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .mockup-foot-lbl { font-size: 12px; color: var(--warm-gray); font-weight: 500; }
+  .mockup-foot-val { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--amber-light); }
 
-  /* MORE FEATURES GRID */
-  .more-features { background: var(--char); padding: 80px 48px; }
-  .more-features-inner { max-width: 1100px; margin: 0 auto; }
-  .feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 52px; }
-  .feat-card {
-    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 16px; padding: 32px; transition: all 0.3s; position: relative; overflow: hidden;
-  }
-  .feat-card::after {
-    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px;
-    background: linear-gradient(90deg, var(--ember), var(--amber));
-    transform: scaleX(0); transition: transform 0.3s; transform-origin: left;
-  }
-  .feat-card:hover::after { transform: scaleX(1); }
-  .feat-card:hover { transform: translateY(-4px); box-shadow: 0 24px 48px rgba(0,0,0,0.4); border-color: rgba(196,80,26,0.2); }
-  .feat-card-icon { font-size: 28px; margin-bottom: 16px; }
-  .feat-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 600; color: var(--cream); margin-bottom: 10px; }
-  .feat-card p { font-size: 13px; color: var(--warm-gray); line-height: 1.65; }
+  /* FEATURE RAIL */
+  .rail-section { background: var(--char); padding: 80px 0; border-top: 1px solid var(--border); overflow: hidden; }
+  .rail-header { padding: 0 48px 36px; max-width: 1100px; margin: 0 auto; }
+  .rail-scroll { display: flex; gap: 3px; padding: 0 48px; overflow-x: auto; scrollbar-width: none; }
+  .rail-scroll::-webkit-scrollbar { display: none; }
+  .rail-card { background: var(--panel); border: 1px solid var(--border); padding: 28px 24px; min-width: 240px; flex-shrink: 0; border-radius: 3px; transition: all 0.25s; }
+  .rail-card:hover { border-color: rgba(196,80,26,0.3); background: rgba(196,80,26,0.04); }
+  .rail-icon { font-size: 26px; margin-bottom: 12px; display: block; }
+  .rail-card h3 { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; color: var(--cream); margin-bottom: 8px; }
+  .rail-card p { font-size: 13px; color: var(--warm-gray); line-height: 1.65; }
+  .rail-hint { text-align: center; margin-top: 20px; font-size: 12px; color: var(--warm-gray); letter-spacing: 0.06em; }
 
   /* COMPARISON */
-  .comparison { background: var(--black); padding: 100px 48px; }
-  .comparison-inner { max-width: 860px; margin: 0 auto; }
-  .comp-wrap {
-    background: var(--char); border-radius: 20px; overflow: hidden;
-    border: 1px solid rgba(255,255,255,0.07); margin-top: 52px;
-    box-shadow: 0 32px 64px rgba(0,0,0,0.5);
-  }
-  .comp-head {
-    display: grid; grid-template-columns: 1.4fr 1fr 1fr;
-    background: var(--brown);
-  }
-  .comp-hcell { padding: 22px 28px; }
-  .comp-hcell.feat { font-size: 12px; color: var(--warm-gray); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
-  .comp-hcell.iris-h {
-    font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700;
-    color: var(--ember-light); display: flex; align-items: center; gap: 10px;
-  }
-  .comp-hcell.other-h {
-    font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600;
-    color: rgba(255,255,255,0.4);
-  }
-  .iris-rec {
-    background: rgba(196,80,26,0.2); color: var(--ember-light);
-    font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700;
-    letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 8px; border-radius: 3px;
-    border: 1px solid rgba(196,80,26,0.3);
-  }
-  .comp-row-r {
-    display: grid; grid-template-columns: 1.4fr 1fr 1fr;
-    border-top: 1px solid rgba(255,255,255,0.04); transition: background 0.2s;
-  }
-  .comp-row-r:hover { background: rgba(255,255,255,0.02); }
-  .comp-cell-r { padding: 16px 28px; font-size: 14px; display: flex; align-items: center; gap: 8px; }
-  .comp-cell-r.feat-r { color: var(--cream); font-weight: 500; font-size: 14px; }
-  .comp-cell-r.iris-r { color: var(--cream); font-weight: 500; }
-  .comp-cell-r.other-r { color: var(--warm-gray); }
-  .ck { color: #4ade80; font-size: 17px; }
-  .cx { color: var(--red-loss); font-size: 17px; }
-  .price-row-r { background: rgba(212,150,10,0.04); border-top: 2px solid rgba(212,150,10,0.15) !important; }
-  .big-price-iris { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: var(--amber-light) !important; }
-  .big-price-other { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; color: var(--red-loss) !important; }
+  .comparison { background: var(--black); padding: 100px 48px; border-top: 1px solid var(--border); }
+  .comparison-inner { max-width: 880px; margin: 0 auto; }
+  .comp-wrap { background: var(--char); border: 1px solid var(--border); border-top: 2px solid var(--ember); border-radius: 4px; overflow: hidden; margin-top: 52px; box-shadow: 0 24px 56px rgba(0,0,0,0.5); }
+  .comp-head { display: grid; grid-template-columns: 1.4fr 1fr 1fr; background: var(--panel); }
+  .ch { padding: 17px 22px; }
+  .ch.f { font-size: 11px; color: var(--warm-gray); font-weight: 500; letter-spacing: 0.06em; }
+  .ch.i { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; color: var(--ember-light); display: flex; align-items: center; gap: 8px; }
+  .ch.o { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-weight: 600; color: var(--warm-gray); }
+  .i-pill { background: var(--ember); color: white; font-size: 9px; font-family: 'DM Sans', sans-serif; font-weight: 700; letter-spacing: 0.08em; padding: 2px 7px; border-radius: 2px; }
+  .comp-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; border-top: 1px solid var(--border); transition: background 0.15s; }
+  .comp-row:hover { background: rgba(255,255,255,0.015); }
+  .cc { padding: 13px 22px; font-size: 13px; display: flex; align-items: center; gap: 7px; }
+  .cc.f { color: var(--cream); font-weight: 500; }
+  .cc.i { color: var(--text-light); font-weight: 500; }
+  .cc.o { color: var(--warm-gray); }
+  .ck { color: var(--green-fresh); font-size: 16px; font-weight: 700; }
+  .cx { color: var(--red-loss); font-size: 16px; font-weight: 700; }
+  .price-row { background: rgba(196,80,26,0.04); border-top: 2px solid rgba(196,80,26,0.2) !important; }
+  .big-i { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 700; color: var(--amber-light) !important; }
+  .big-o { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 700; color: var(--warm-gray) !important; }
 
-  /* TESTIMONIALS */
-  .testimonials { background: var(--char); padding: 100px 48px; }
-  .testimonials-inner { max-width: 1100px; margin: 0 auto; }
-  .testi-head { text-align: center; margin-bottom: 60px; }
-  .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-  .testi-card {
-    background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06);
-    border-radius: 20px; padding: 36px; transition: all 0.3s;
-  }
-  .testi-card:hover { transform: translateY(-4px); border-color: rgba(196,80,26,0.25); box-shadow: 0 24px 48px rgba(0,0,0,0.4); }
-  .testi-stars { color: var(--amber); font-size: 14px; margin-bottom: 14px; }
-  .testi-q-mark { font-family: 'Cormorant Garamond', serif; font-size: 48px; line-height: 1; color: var(--ember); opacity: 0.35; margin-bottom: 4px; }
-  .testi-text { font-size: 15px; color: var(--text-light); line-height: 1.75; font-style: italic; margin-bottom: 24px; }
-  .testi-author-row { display: flex; align-items: center; gap: 12px; }
-  .testi-av {
-    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
-    background: var(--brown); border: 2px solid rgba(196,80,26,0.3);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 700; color: var(--ember-light);
-  }
-  .testi-name { font-size: 14px; font-weight: 600; color: var(--cream); }
-  .testi-role { font-size: 12px; color: var(--warm-gray); margin-top: 2px; }
+  /* TESTIMONIALS — EDITORIAL */
+  .testimonials { background: var(--char); padding: 100px 48px; border-top: 1px solid var(--border); }
+  .testi-inner { max-width: 1100px; margin: 0 auto; }
+  .testi-primary-wrap { background: var(--ember); padding: 56px 64px; margin-top: 52px; }
+  .testi-primary-q { font-family: 'Cormorant Garamond', serif; font-size: 96px; font-weight: 700; color: rgba(255,255,255,0.15); line-height: 1; margin-bottom: -26px; }
+  .testi-primary-text { font-family: 'Cormorant Garamond', serif; font-size: clamp(19px, 2.5vw, 25px); font-weight: 600; line-height: 1.45; color: white; margin-bottom: 36px; max-width: 800px; }
+  .testi-primary-author { display: flex; align-items: center; gap: 16px; }
+  .testi-primary-av { width: 46px; height: 46px; background: var(--black); color: var(--ember-light); font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; border-radius: 3px; flex-shrink: 0; }
+  .testi-primary-name { font-weight: 600; font-size: 15px; color: white; }
+  .testi-primary-role { font-size: 13px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+  .testi-secondary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 3px; }
+  .testi-secondary { background: var(--panel); border: 1px solid var(--border); padding: 36px; transition: background 0.2s; }
+  .testi-secondary:hover { background: rgba(196,80,26,0.05); }
+  .testi-sec-text { font-size: 15px; color: var(--warm-gray); line-height: 1.75; font-style: italic; margin-bottom: 24px; }
+  .testi-sec-author { display: flex; align-items: center; gap: 12px; }
+  .testi-sec-av { width: 38px; height: 38px; border-radius: 3px; background: var(--ember); color: white; font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .testi-sec-name { font-weight: 600; font-size: 14px; color: var(--cream); }
+  .testi-sec-role { font-size: 12px; color: var(--warm-gray); margin-top: 2px; }
 
-  /* PRICING */
-  .pricing { background: var(--black); padding: 100px 48px; }
-  .pricing-inner { max-width: 760px; margin: 0 auto; text-align: center; }
-  .pricing-card {
-    background: var(--char); border-radius: 24px;
-    border: 1px solid rgba(196,80,26,0.25);
-    padding: 56px 52px; margin-top: 52px; position: relative; overflow: hidden;
-  }
-  .pricing-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, var(--ember), var(--amber), var(--ember));
-    background-size: 200%; animation: shimmer 3s linear infinite;
-  }
-  .pricing-pill {
-    display: inline-block; background: rgba(196,80,26,0.15); border: 1px solid rgba(196,80,26,0.3);
-    color: var(--ember-light); padding: 6px 18px; border-radius: 100px;
-    font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;
-  }
-  .pricing-plan-name { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 700; color: var(--cream); margin-bottom: 8px; }
-  .pricing-amount { font-family: 'Cormorant Garamond', serif; font-size: 88px; font-weight: 700; color: var(--amber-light); line-height: 1; margin: 16px 0 4px; }
-  .pricing-amount sup { font-size: 36px; vertical-align: top; margin-top: 18px; }
-  .pricing-per { color: var(--warm-gray); font-size: 15px; margin-bottom: 36px; }
-  .pricing-features { text-align: left; margin: 32px 0; }
-  .pricing-feat {
-    display: flex; align-items: center; gap: 12px;
-    padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-    font-size: 15px; color: var(--text-light);
-  }
-  .pricing-feat:last-child { border-bottom: none; }
-  .p-ck { color: var(--green-fresh); font-size: 17px; }
-  .pricing-cta-btn {
-    width: 100%; background: var(--ember); color: white;
-    padding: 18px; border-radius: 10px; font-weight: 600; font-size: 15px;
-    cursor: pointer; border: none; letter-spacing: 0.05em; text-transform: uppercase;
-    transition: all 0.25s;
-  }
-  .pricing-cta-btn:hover { background: var(--ember-light); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(196,80,26,0.4); }
-  .pricing-note { color: var(--warm-gray); font-size: 13px; margin-top: 14px; }
+  /* PRICING — SPLIT */
+  .pricing { background: var(--black); border-top: 1px solid var(--border); }
+  .pricing-layout { display: grid; grid-template-columns: 1fr 1fr; max-width: 1100px; margin: 0 auto; }
+  .pricing-left { padding: 80px 56px 80px 48px; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: center; }
+  .pricing-amount { font-family: 'Cormorant Garamond', serif; font-size: 100px; font-weight: 700; color: var(--amber-light); line-height: 1; }
+  .pricing-amount sup { font-size: 42px; vertical-align: top; margin-top: 20px; }
+  .pricing-cadence { font-size: 15px; color: var(--warm-gray); margin: 8px 0 32px; }
+  .pricing-left p { font-size: 15px; color: var(--warm-gray); line-height: 1.75; font-weight: 300; margin-bottom: 32px; }
+  .pricing-cta { width: 100%; background: var(--ember); color: white; padding: 17px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; font-size: 15px; letter-spacing: 0.03em; transition: all 0.25s; }
+  .pricing-cta:hover { background: var(--ember-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(196,80,26,0.4); }
+  .pricing-note { font-size: 13px; color: var(--warm-gray); margin-top: 12px; }
+  .pricing-right { padding: 80px 48px; }
+  .p-feat { display: flex; align-items: flex-start; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--warm-gray); }
+  .p-feat:last-child { border-bottom: none; }
+  .p-ck { color: var(--green-fresh); font-size: 16px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
 
   /* CTA */
-  .cta-section { background: var(--ember); padding: 100px 48px; text-align: center; position: relative; overflow: hidden; }
-  .cta-section::before {
-    content: ''; position: absolute; inset: 0;
-    background: repeating-linear-gradient(45deg, rgba(0,0,0,0.04) 0, rgba(0,0,0,0.04) 1px, transparent 0, transparent 50%);
-    background-size: 16px 16px;
-  }
-  .cta-inner { position: relative; z-index: 2; max-width: 680px; margin: 0 auto; }
-  .cta-icon { font-size: 60px; margin-bottom: 24px; display: block; animation: float 5s ease-in-out infinite; }
-  .cta-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 5vw, 60px); font-weight: 700; color: white; line-height: 1.1; margin-bottom: 20px; }
-  .cta-sub { font-size: 17px; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 40px; font-weight: 300; }
-  .cta-btn-white {
-    background: white; color: var(--ember);
-    padding: 18px 52px; border-radius: 8px;
-    font-weight: 700; font-size: 15px; cursor: pointer; border: none;
-    letter-spacing: 0.05em; text-transform: uppercase; transition: all 0.25s;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-  }
-  .cta-btn-white:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(0,0,0,0.3); }
+  .cta-section { background: var(--ember); padding: 90px 48px; text-align: center; position: relative; overflow: hidden; }
+  .cta-section::before { content: ''; position: absolute; inset: 0; background-image: linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px); background-size: 40px 40px; }
+  .cta-inner { position: relative; z-index: 2; max-width: 660px; margin: 0 auto; }
+  .cta-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(38px, 5.5vw, 64px); font-weight: 700; color: white; line-height: 1.05; margin-bottom: 18px; }
+  .cta-sub { font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.7; margin-bottom: 40px; font-weight: 300; }
+  .cta-btns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .cta-btn-dark { background: var(--black); color: var(--amber-light); padding: 17px 48px; border: none; cursor: pointer; font-weight: 600; font-size: 15px; border-radius: 4px; transition: all 0.25s; }
+  .cta-btn-dark:hover { background: var(--char); transform: translateY(-2px); }
+  .cta-btn-outline { background: transparent; color: white; padding: 15px 44px; cursor: pointer; font-weight: 600; font-size: 15px; border: 1.5px solid rgba(255,255,255,0.4); border-radius: 4px; transition: all 0.25s; }
+  .cta-btn-outline:hover { border-color: white; }
 
   /* FOOTER */
-  .footer {
-    background: var(--black); padding: 36px 48px;
-    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
-    border-top: 1px solid rgba(255,255,255,0.05);
-  }
-  .footer-copy { font-size: 13px; color: rgba(255,255,255,0.25); }
+  .footer { background: var(--black); padding: 30px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; border-top: 1px solid var(--border); }
+  .footer-copy { font-size: 13px; color: var(--warm-gray); }
   .footer-copy strong { color: var(--ember-light); }
   .footer-links { display: flex; gap: 24px; }
-  .footer-lnk { font-size: 13px; color: rgba(255,255,255,0.25); cursor: pointer; transition: color 0.2s; }
-  .footer-lnk:hover { color: var(--ember-light); }
+  .f-lnk { font-size: 13px; color: var(--warm-gray); cursor: pointer; transition: color 0.2s; }
+  .f-lnk:hover { color: var(--ember-light); }
 
   /* MODAL */
-  .modal-ov {
-    position: fixed; inset: 0; z-index: 1000;
-    background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
-    display: flex; align-items: center; justify-content: center; padding: 24px;
-  }
-  .modal-box {
-    background: var(--char); border-radius: 24px; padding: 48px;
-    max-width: 480px; width: 100%; position: relative;
-    border: 1px solid rgba(196,80,26,0.25);
-    animation: scaleIn 0.3s ease;
-    box-shadow: 0 40px 80px rgba(0,0,0,0.7);
-  }
-  .modal-x {
-    position: absolute; top: 20px; right: 20px;
-    background: rgba(255,255,255,0.05); border: none; font-size: 18px;
-    cursor: pointer; color: var(--warm-gray); width: 36px; height: 36px;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-  }
-  .modal-x:hover { background: rgba(196,80,26,0.15); color: var(--ember-light); }
-  .modal-h { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 700; color: var(--cream); margin-bottom: 6px; }
+  .modal-ov { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.88); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .modal-box { background: var(--char); border: 1px solid var(--border); border-top: 3px solid var(--ember); border-radius: 4px; padding: 48px; max-width: 480px; width: 100%; position: relative; animation: scaleIn 0.3s ease; box-shadow: 0 40px 80px rgba(0,0,0,0.8); }
+  .modal-x { position: absolute; top: 16px; right: 16px; background: var(--panel); border: 1px solid var(--border); color: var(--warm-gray); width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; transition: all 0.2s; border-radius: 3px; }
+  .modal-x:hover { border-color: var(--ember); color: var(--ember-light); }
+  .modal-h { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: var(--cream); margin-bottom: 6px; }
   .modal-s { color: var(--warm-gray); font-size: 14px; margin-bottom: 28px; }
-  .f-group { margin-bottom: 18px; }
-  .f-label { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 6px; display: block; letter-spacing: 0.06em; text-transform: uppercase; }
-  .f-input {
-    width: 100%; padding: 13px 16px; border-radius: 8px;
-    background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
-    font-size: 14px; font-family: 'DM Sans', sans-serif;
-    color: var(--cream); outline: none; transition: border-color 0.2s;
-  }
+  .f-group { margin-bottom: 16px; }
+  .f-label { font-size: 12px; font-weight: 600; letter-spacing: 0.08em; color: var(--ember-light); margin-bottom: 6px; display: block; }
+  .f-input { width: 100%; padding: 12px 16px; background: var(--panel); border: 1px solid var(--border); font-size: 14px; font-family: 'DM Sans', sans-serif; color: var(--cream); outline: none; transition: border-color 0.2s; border-radius: 3px; }
   .f-input::placeholder { color: var(--warm-gray); }
   .f-input:focus { border-color: var(--ember); }
-  .f-select { appearance: none; cursor: pointer; }
-  .f-btn {
-    width: 100%; background: var(--ember); color: white;
-    padding: 15px; border-radius: 8px; font-weight: 600; font-size: 15px;
-    cursor: pointer; border: none; margin-top: 8px; letter-spacing: 0.05em; text-transform: uppercase;
-    transition: all 0.25s;
-  }
+  .f-btn { width: 100%; background: var(--ember); color: white; padding: 15px; border: none; cursor: pointer; font-weight: 600; font-size: 15px; border-radius: 3px; margin-top: 8px; transition: all 0.25s; }
   .f-btn:hover { background: var(--ember-light); }
   .success-wrap { text-align: center; padding: 20px 0; }
-  .success-icon-big { font-size: 52px; margin-bottom: 16px; display: block; }
+  .success-emoji { font-size: 48px; display: block; margin-bottom: 14px; }
   .success-h { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 700; color: var(--cream); margin-bottom: 10px; }
-  .success-p { color: var(--warm-gray); font-size: 14px; line-height: 1.6; }
+  .success-p { color: var(--warm-gray); font-size: 14px; line-height: 1.65; }
 
   @media (max-width: 900px) {
     .nav { padding: 0 20px; }
-    .hero-layout { grid-template-columns: 1fr; gap: 48px; }
+    .nav-links { display: none; }
+    .service-bar { display: none; }
+    .hero { padding: 100px 20px 60px; }
+    .hero-layout { grid-template-columns: 1fr; }
     .hero-right { display: none; }
-    .hero { padding: 130px 20px 70px; }
-    .pain-grid { grid-template-columns: 1fr; }
-    .features-top { grid-template-columns: 1fr; }
-    .feat-grid { grid-template-columns: 1fr; }
-    .testi-grid { grid-template-columns: 1fr; }
-    .comp-head, .comp-row-r { grid-template-columns: 1.2fr 1fr 1fr; }
-    .comp-cell-r, .comp-hcell { padding: 14px 16px; font-size: 13px; }
-    .pain, .features, .more-features, .comparison, .testimonials, .pricing, .cta-section { padding: 70px 20px; }
-    .footer { flex-direction: column; align-items: flex-start; padding: 28px 20px; }
-    .pricing-card { padding: 36px 28px; }
+    .pain-top { grid-template-columns: 1fr; }
+    .pain-left { padding: 60px 20px 40px; border-right: none; border-bottom: 1px solid var(--border); }
+    .pain-right { padding: 40px 20px 60px; }
+    .features-layout { grid-template-columns: 1fr; }
+    .testi-secondary-grid { grid-template-columns: 1fr; }
+    .pricing-layout { grid-template-columns: 1fr; }
+    .pricing-left { padding: 60px 20px; border-right: none; border-bottom: 1px solid var(--border); }
+    .pricing-right { padding: 60px 20px; }
+    .features, .comparison, .testimonials, .cta-section { padding: 70px 20px; }
+    .comp-head, .comp-row { grid-template-columns: 1.2fr 1fr 1fr; }
+    .cc, .ch { padding: 12px 14px; font-size: 12px; }
+    .footer { flex-direction: column; align-items: flex-start; padding: 24px 20px; }
+    .modal-box { padding: 36px 24px; }
+    .testi-primary-wrap { padding: 40px 28px; }
   }
 `;
 
-const tickerItems = [
-  "Recipe Costing", "Ingredient Tracking", "Supplier Management", "Built-in POS",
-  "Profit Margin Alerts", "Invoice to Customer", "Food Cost Reports", "Daily Sales Tracking",
-  "Payroll Ready", "Multi-Location Support",
-];
-
 const mainFeatures = [
-  { icon: "🧮", title: "Recipe Costing Engine", desc: "Calculate the exact food cost and margin for every dish on your menu — down to the gram.", tag: "Restaurant-Specific" },
-  { icon: "📦", title: "Ingredient & Inventory Tracking", desc: "Track stock levels, flag low inventory, and auto-link to supplier orders. No more surprise stockouts.", tag: "Saves Waste" },
-  { icon: "🧾", title: "Supplier Management", desc: "All your vendors, invoices, and purchase orders in one place. Compare prices across suppliers automatically.", tag: "Cuts Costs" },
-  { icon: "🖥️", title: "Built-in POS & Cash Register", desc: "Run sales at the counter or table. Every transaction flows directly into your books. No middleware.", tag: "No Integration Needed" },
+  { icon: "🧮", title: "Recipe Costing Engine", desc: "Calculate the exact food cost and margin for every dish — down to the gram. Updates automatically when supplier prices change.", tag: "Restaurant-Specific" },
+  { icon: "📦", title: "Ingredient & Inventory Tracking", desc: "Track stock, flag low inventory, link to supplier orders. No more 86'd items that blindside a Friday service.", tag: "Saves Waste" },
+  { icon: "🧾", title: "Supplier Management", desc: "All vendors, invoices, and POs in one place. Compare prices across suppliers automatically.", tag: "Cuts Costs" },
+  { icon: "🖥️", title: "Built-in POS", desc: "Run the floor with a built-in register. Every transaction flows directly into your books — no middleware, no lag.", tag: "No Integration Needed" },
 ];
 
-const moreFeatures = [
-  { icon: "📊", title: "Daily Sales Reports", desc: "See revenue, food cost %, labor cost %, and net margin every single day — not just at month-end." },
-  { icon: "💳", title: "Iris Pay Processing", desc: "Accept cards and mobile money at the counter. Payouts land in your account fast." },
-  { icon: "🧑‍🍳", title: "Staff & Payroll", desc: "Track hours, calculate wages, and run payroll directly from the platform." },
-  { icon: "📄", title: "Professional Invoicing", desc: "Send invoices to catering clients or corporate accounts with your logo and QR code." },
-  { icon: "📈", title: "P&L in Real Time", desc: "Your profit and loss updates live as transactions happen. Know your numbers before your accountant does." },
-  { icon: "🌍", title: "Multi-Currency & Multi-Location", desc: "Running locations in different cities or countries? Consolidated reporting across all of them." },
+const railFeatures = [
+  { icon: "📊", title: "Daily Sales Reports", desc: "Revenue, food cost %, labor %, and net margin — every day, not month-end." },
+  { icon: "💳", title: "Iris Pay Processing", desc: "Cards and mobile money at the counter. Fast payouts to your account." },
+  { icon: "🧑‍🍳", title: "Staff & Payroll", desc: "Track hours, calculate wages, run payroll — same platform." },
+  { icon: "📄", title: "Catering Invoicing", desc: "Professional invoices with logo and QR code for corporate and event clients." },
+  { icon: "📈", title: "Real-Time P&L", desc: "Profit and loss updates live as transactions happen. Know before your accountant does." },
+  { icon: "🌍", title: "Multi-Location", desc: "Multiple kitchens or cities? Consolidated reporting with per-location breakdowns." },
+];
+
+const menuData = [
+  { icon: "🥩", name: "Grilled Ribeye", cost: "Food cost: 28%", margin: "+$42.00", cls: "ok" },
+  { icon: "🍝", name: "Pasta Carbonara", cost: "Food cost: 18%", margin: "+$24.00", cls: "ok" },
+  { icon: "🥗", name: "Caesar Salad", cost: "Food cost: 41% ⚠", margin: "-$2.00", cls: "bad" },
+  { icon: "🍰", name: "Lava Cake", cost: "Food cost: 22%", margin: "+$11.00", cls: "warn" },
 ];
 
 const testimonials = [
-  { q: "We were using Square for POS and QuickBooks for accounting. The data never matched. Iris Financial connects both — now every sale is in the books automatically.", name: "Chef Marcus B.", role: "La Maison Bistro, Chicago IL", init: "M" },
-  { q: "The recipe costing feature alone saved us. We discovered three items were actually losing money. We repriced them and added $4,200 to monthly profit.", name: "Owner T. Nguyen", role: "Pho & More Restaurant, Houston TX", init: "T" },
-  { q: "I finally understand my food cost percentage every week, not every quarter. That visibility changed how we order, how we menu, everything.", name: "GM Fatima A.", role: "Spice Garden, Atlanta GA", init: "F" },
+  { q: "The recipe costing feature alone changed everything. We found three dishes losing money — repriced them and added $4,200 to monthly profit without changing a single supplier or cutting a single staff hour.", name: "Owner T. Nguyen", role: "Pho & More Restaurant, Houston TX", init: "T", primary: true },
+  { q: "We were using Square and QuickBooks and the data never matched. Iris Financial connects both — every sale is in the books automatically. I stopped doing weekend reconciliation.", name: "Chef Marcus B.", role: "La Maison Bistro, Chicago IL", init: "M", primary: false },
+  { q: "I finally understand my food cost percentage every week, not every quarter. That visibility changed how we order, how we menu plan, everything.", name: "GM Fatima A.", role: "Spice Garden, Atlanta GA", init: "F", primary: false },
 ];
 
-const menuItems = [
-  { icon: "🥩", name: "Grilled Ribeye", sub: "Food cost: 28%", cost: "↑ $42.00", isGood: true },
-  { icon: "🍝", name: "Pasta Carbonara", sub: "Food cost: 18%", cost: "↑ $24.00", isGood: true },
-  { icon: "🥗", name: "Caesar Salad", sub: "Food cost: 41% ⚠️", cost: "↓ $14.00", isGood: false },
-  { icon: "🍰", name: "Chocolate Lava Cake", sub: "Food cost: 22%", cost: "↑ $11.00", isGood: true },
-];
-
-export default function RestaurantLandingPage() {
+export default function RestaurantPage() {
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState({ name: "", restaurant: "", email: "", type: "" });
   const [submitted, setSubmitted] = useState(false);
-  const [activeTab, setActiveTab] = useState("today");
+  const [activeTab, setActiveTab] = useState("menu");
 
   useEffect(() => {
     const el = document.createElement("style");
@@ -622,148 +367,157 @@ export default function RestaurantLandingPage() {
       await fetch("https://formspree.io/f/xwlkjjgv", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({
-          name: form.name,
-          restaurant: form.restaurant,
-          email: form.email,
-          restaurant_type: form.type,
-          vertical: "Restaurant",
-        }),
+        body: JSON.stringify({ name: form.name, restaurant: form.restaurant, email: form.email, restaurant_type: form.type, vertical: "Restaurant" }),
       });
     } catch (e) {}
     setSubmitted(true);
-    setTimeout(() => {
-      window.location.href = "https://irisfinancial.tech/auth/signup?vertical=restaurant&ref=landing";
-    }, 2000);
+    setTimeout(() => { window.location.href = "https://irisfinancial.tech/auth/signup?vertical=restaurant&ref=landing"; }, 2000);
   };
+
+  const primary = testimonials.find(t => t.primary);
+  const secondary = testimonials.filter(t => !t.primary);
 
   return (
     <div>
-      {/* NAV */}
       <nav className="nav">
         <div className="nav-left">
-          <img src="/media/image/logo.png" alt="Iris Financial" style={{ height: "36px", width: "auto" }} />
+          <img src="/media/image/logo2.png" alt="Iris Financial" style={{ height: "36px", width: "auto" }} />
         </div>
-        <div className="nav-right">
-          <span className="nav-link">Features</span>
-          <span className="nav-link">Pricing</span>
-          <button className="nav-btn" onClick={() => setShowModal(true)}>Start Free</button>
+        <div className="nav-links">
+          <span className="nav-lnk">Features</span>
+          <span className="nav-lnk">Pricing</span>
+          <span className="nav-lnk">Demo</span>
         </div>
+        <button className="nav-cta" onClick={() => setShowModal(true)}>Start Free</button>
       </nav>
 
-      {/* TICKER */}
-      <div className="ticker">
-        <div className="ticker-inner">
-          {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span className="ticker-item" key={i}>
-              {item} <span className="ticker-dot" />
-            </span>
-          ))}
-        </div>
+      {/* SERVICE BAR */}
+      <div className="service-bar">
+        <div className="sb-item"><div className="sb-live"><div className="sb-dot" /></div><span className="sb-val">Dinner service</span><span>active</span></div>
+        <div className="sb-item"><span className="sb-val">$3,240</span><span>revenue today</span></div>
+        <div className="sb-item"><span className="sb-val">27.3%</span><span>food cost this week</span></div>
+        <div className="sb-item"><span className="sb-val">Caesar Salad</span><span>⚠ losing margin</span></div>
+        <div className="sb-item"><span className="sb-val">32 covers</span><span>tonight so far</span></div>
       </div>
 
       {/* HERO */}
       <section className="hero">
-        <div className="hero-texture" />
-        <div className="hero-glow-left" />
-        <div className="hero-glow-right" />
+        <div className="hero-grid" />
+        <div className="hero-glow" />
         <div className="hero-layout">
-          <div className="hero-left">
-            <div className="hero-badge">🍽️ Built for Food & Hospitality</div>
+          <div>
+            <div className="hero-label">Built for Restaurants & Hospitality</div>
             <h1 className="hero-title">
-              Know your <em>margins.</em><br />
+              Know your<br />
+              <em>margins.</em><br />
               Run a leaner<br />
               <span className="amber">kitchen.</span>
             </h1>
-            <p className="hero-sub">
-              Recipe costing, ingredient tracking, POS integration, and real-time P&L — all in one platform built specifically for restaurants. Free to start.
-            </p>
+            <p className="hero-sub">Recipe costing, inventory tracking, POS integration, and real-time P&L — one platform built for restaurants. Free to start.</p>
             <div className="hero-actions">
-              <button className="btn-fire" onClick={() => setShowModal(true)}>Start Free — No Credit Card</button>
+              <button className="btn-ember" onClick={() => setShowModal(true)}>Start Free — No Credit Card</button>
               <button className="btn-ghost">Watch Demo ▶</button>
-            </div>
-            <div className="hero-proof">
-              <div className="proof-item">
-                <div className="proof-num">$0</div>
-                <div className="proof-label">to get started</div>
-              </div>
-              <div className="proof-item">
-                <div className="proof-num">~18%</div>
-                <div className="proof-label">avg food cost savings</div>
-              </div>
-              <div className="proof-item">
-                <div className="proof-num">1 platform</div>
-                <div className="proof-label">replaces 4+ tools</div>
-              </div>
             </div>
           </div>
 
-          {/* HERO CARD */}
           <div className="hero-right">
-            <div className="receipt-card">
-              <div className="receipt-header">
-                <div className="receipt-title">Today's Kitchen Dashboard</div>
-                <div className="receipt-live">
-                  <div className="live-dot" />
-                  <span className="live-text">Live</span>
-                </div>
+            <div className="menu-card">
+              <div className="mc-head">
+                <span className="mc-head-title">Tonight's Menu Dashboard</span>
+                <div className="mc-live"><div className="mc-live-dot" /><span className="mc-live-txt">Live</span></div>
               </div>
-              <div className="receipt-tabs">
-                {["today", "week", "month"].map(t => (
-                  <div key={t} className={`receipt-tab ${activeTab === t ? "active" : ""}`} onClick={() => setActiveTab(t)}>
-                    {t.charAt(0).toUpperCase() + t.slice(1)}
+              <div className="mc-tabs">
+                {["menu", "inventory"].map(t => (
+                  <div key={t} className={`mc-tab ${activeTab === t ? "active" : ""}`} onClick={() => setActiveTab(t)}>
+                    {t === "menu" ? "Margin by Dish" : "Inventory Alerts"}
                   </div>
                 ))}
               </div>
-              <div className="receipt-body">
-                {menuItems.map((item, i) => (
-                  <div className="receipt-row" key={i}>
-                    <div className="receipt-label">
-                      <span>{item.icon}</span> {item.name}
-                      <span style={{ fontSize: 11, color: "var(--warm-gray)", display: "block", marginTop: 2 }}>{item.sub}</span>
-                    </div>
-                    <div className={`receipt-val ${item.isGood ? "green" : "red"}`}>{item.cost}</div>
+              {activeTab === "menu" ? (
+                <>
+                  <div className="mc-items">
+                    {menuData.map((item, i) => (
+                      <div className="mc-item" key={i}>
+                        <div className="mc-item-left">
+                          <span className="mc-icon">{item.icon}</span>
+                          <div><div className="mc-name">{item.name}</div><div className="mc-sub">{item.cost}</div></div>
+                        </div>
+                        <div className={`mc-val ${item.cls}`}>{item.margin}</div>
+                      </div>
+                    ))}
                   </div>
-                ))}
-                <div className="receipt-badge-row">
-                  <span className="r-badge">32 covers today</span>
-                  <span className="r-badge hot">Food cost: 27.3%</span>
-                  <span className="r-badge">Labor: 31%</span>
-                </div>
-              </div>
-              <div className="receipt-footer">
-                <div>
-                  <div className="receipt-footer-label">Net Margin Today</div>
-                </div>
-                <div className="receipt-footer-val">+$1,847</div>
-              </div>
+                  <div className="mc-footer">
+                    <span className="mc-footer-lbl">Net Margin Tonight</span>
+                    <span className="mc-footer-val">+$1,847</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="mc-items">
+                    {[
+                      { icon: "⚠️", name: "Ribeye (12oz)", sub: "3 portions left · reorder needed", val: "LOW", cls: "bad" },
+                      { icon: "✓", name: "Pasta (rigatoni)", sub: "Full stock · 4 service days", val: "OK", cls: "ok" },
+                      { icon: "⚠️", name: "Truffle Oil", sub: "2 bottles · below threshold", val: "LOW", cls: "bad" },
+                      { icon: "✓", name: "Heavy Cream", sub: "Adequate stock", val: "OK", cls: "ok" },
+                    ].map((item, i) => (
+                      <div className="mc-item" key={i}>
+                        <div className="mc-item-left">
+                          <span className="mc-icon">{item.icon}</span>
+                          <div><div className="mc-name">{item.name}</div><div className="mc-sub">{item.sub}</div></div>
+                        </div>
+                        <div className={`mc-val ${item.cls}`}>{item.val}</div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mc-footer">
+                    <span className="mc-footer-lbl">POs auto-sent to suppliers</span>
+                    <span className="mc-footer-val">2 pending</span>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
       </section>
 
-      {/* PAIN */}
+      {/* PAIN — SPLIT */}
       <section className="pain">
-        <div className="pain-inner">
-          <div className="section-eyebrow">Sound familiar?</div>
-          <h2 className="section-heading">Most restaurants bleed money<br />because they can't <em>see it happening.</em></h2>
-          <p className="section-body">The average restaurant loses 4–9% of revenue to preventable waste and mispriced menu items — because they're not tracking the right numbers in real time.</p>
-          <div className="pain-grid">
+        <div className="pain-top">
+          <div className="pain-left">
+            <div className="pain-eyebrow">The margin problem</div>
+            <h2 className="pain-headline">Your most popular dish<br />might be your biggest<br /><em>money loser.</em></h2>
+            <p className="pain-deck">Restaurants price menus on instinct, competitor rates, or "what feels right." When you cost it out properly — ingredient, labor, waste, portioning variance — the numbers rarely match the assumption.</p>
+            <div className="pain-dish">
+              <div className="pain-dish-label">A typical pasta dish — the full cost</div>
+              <div className="pain-dish-name">Truffle Rigatoni — priced at $28</div>
+              {[
+                { desc: "Ingredients (pasta, cream, truffle oil, parmesan)", val: "-$7.20", cls: "red" },
+                { desc: "Labor — 12 min prep + 8 min cook at $20/hr", val: "-$6.67", cls: "red" },
+                { desc: "Waste factor (8% of ingredient cost)", val: "-$0.58", cls: "red" },
+                { desc: "Overhead allocation (rent, utilities, per cover)", val: "-$4.80", cls: "red" },
+              ].map((r, i) => (
+                <div className="pain-dish-row" key={i}>
+                  <span className="pain-dish-desc">{r.desc}</span>
+                  <span className={`pain-dish-val ${r.cls}`}>{r.val}</span>
+                </div>
+              ))}
+              <div className="pain-dish-total">
+                <span className="pain-dish-total-lbl">Real margin per cover</span>
+                <span className="pain-dish-total-val">$8.75</span>
+              </div>
+            </div>
+          </div>
+          <div className="pain-right">
             {[
-              { num: "01", title: "You don't know your real food cost", body: "You think it's 30%. Your accountant tells you it's 38% in March. By then you've already lost the margin." },
-              { num: "02", title: "Three tools that don't talk to each other", body: "POS here. Accounting there. Inventory in a spreadsheet. Nothing reconciles. You're doing double entry every week." },
-              { num: "03", title: "Pricing based on gut, not data", body: "Some of your most popular dishes are your lowest-margin dishes. You won't know until you run the numbers — which you haven't." },
+              { emoji: "🔄", title: "POS and accounting never match", body: "Square says one number. QuickBooks says another. Your accountant reconciles them at month-end. By then the service decisions that caused the gap are three weeks old." },
+              { emoji: "📉", title: "Food cost is a monthly surprise", body: "You check your food cost percentage once a month when your accountant sends the report. By then you've already run 30 services at the wrong margin without knowing." },
             ].map((p, i) => (
-              <div className="pain-item" key={i}>
-                <div className="pain-num">{p.num}</div>
+              <div className="pain-issue" key={i}>
+                <span className="pain-issue-emoji">{p.emoji}</span>
                 <h3>{p.title}</h3>
                 <p>{p.body}</p>
               </div>
             ))}
-          </div>
-          <div className="pain-callout">
-            <div className="pain-callout-icon">🔥</div>
-            <p>The average restaurant using Iris Financial identifies <strong>3–5 underpriced menu items</strong> within the first 30 days — unlocking an average of <strong>$3,800/month</strong> in recovered margin.</p>
           </div>
         </div>
       </section>
@@ -771,139 +525,125 @@ export default function RestaurantLandingPage() {
       {/* FEATURES */}
       <section className="features">
         <div className="features-inner">
-          <div className="features-top">
-            <div className="features-visual">
-              <div className="vis-header">
-                <div className="vis-dot" style={{ background: "#ff5f57" }} />
-                <div className="vis-dot" style={{ background: "#febc2e" }} />
-                <div className="vis-dot" style={{ background: "#28c840" }} />
-                <span className="vis-title">Recipe Cost Analysis — This Week</span>
-              </div>
-              <div className="vis-body">
-                {[
-                  { icon: "🥩", name: "Weekend Brunch Set", sub: "Beef tenderloin + sides", cost: "29% margin ✓", ok: true },
-                  { icon: "🍜", name: "House Ramen Bowl", sub: "Pork broth, noodles, egg", cost: "17% margin ✓", ok: true },
-                  { icon: "🍕", name: "Truffle Pizza", sub: "Truffle oil, mozzarella", cost: "44% ⚠ Overspend", ok: false },
-                  { icon: "🥂", name: "Mocktail Combo", sub: "Fresh fruit, mixers", cost: "12% margin ✓", ok: true },
-                ].map((item, i) => (
-                  <div className="vis-menu-item" key={i}>
-                    <div className="vis-item-left">
-                      <div className="vis-item-icon">{item.icon}</div>
-                      <div>
-                        <div className="vis-item-name">{item.name}</div>
-                        <div className="vis-item-sub">{item.sub}</div>
-                      </div>
-                    </div>
-                    <div className={`vis-item-cost ${item.ok ? "" : "red"}`}>{item.cost}</div>
-                  </div>
-                ))}
-                <div className="vis-footer-bar">
-                  <span className="vis-footer-label">Avg. Food Cost This Week</span>
-                  <span className="vis-footer-val">26.4%</span>
+          <div className="s-label">Core features</div>
+          <h2 className="s-title">Built for the kitchen,<br />not the <em>accounting firm.</em></h2>
+          <div className="features-layout">
+            <div className="feat-list">
+              {mainFeatures.map((f, i) => (
+                <div className="feat-row" key={i}>
+                  <div className="feat-icon">{f.icon}</div>
+                  <div><div className="feat-h">{f.title}</div><p className="feat-p">{f.desc}</p><div className="feat-tag">{f.tag}</div></div>
                 </div>
-              </div>
+              ))}
             </div>
-
-            <div>
-              <div className="section-eyebrow">What's included</div>
-              <h2 className="section-heading">The tools your kitchen<br />actually <em>needs.</em></h2>
-              <div className="features-list" style={{ marginTop: 36 }}>
-                {mainFeatures.map((f, i) => (
-                  <div className="feature-row" key={i}>
-                    <div className="feat-icon-wrap">{f.icon}</div>
-                    <div className="feat-content">
-                      <h4>{f.title}</h4>
-                      <p>{f.desc}</p>
-                      <div className="feat-tag">{f.tag}</div>
+            <div className="mockup">
+              <div className="mockup-top">
+                <span className="mockup-title">Menu Margin Analysis — This Week</span>
+                <div className="mockup-live"><div className="m-dot" /><span className="m-live">Live</span></div>
+              </div>
+              <div className="mockup-metrics">
+                <div className="mm"><div className="mm-lbl">Avg Food Cost</div><div className="mm-val">27.3%</div><div className="mm-delta">↓ 2.1% vs last week</div></div>
+                <div className="mm"><div className="mm-lbl">Covers This Week</div><div className="mm-val cream">218</div><div className="mm-delta">↑ 14 vs last week</div></div>
+                <div className="mm"><div className="mm-lbl">Net Margin</div><div className="mm-val green">18.4%</div><div className="mm-delta">Target: 18%</div></div>
+              </div>
+              <div className="mockup-rows">
+                {[
+                  { emoji: "🥩", name: "Weekend Brunch Set", cost: "Beef tenderloin + sides", margin: "29%", cls: "ok" },
+                  { emoji: "🍜", name: "House Ramen Bowl", cost: "Pork broth, noodles, egg", margin: "17%", cls: "ok" },
+                  { emoji: "🍕", name: "Truffle Pizza", cost: "Truffle oil, mozz — ⚠ overspend", margin: "44%", cls: "bad" },
+                  { emoji: "🥂", name: "Mocktail Combo", cost: "Fresh fruit, mixers", margin: "12%", cls: "warn" },
+                ].map((item, i) => (
+                  <div className="m-row" key={i}>
+                    <div className="m-row-left">
+                      <span style={{ fontSize: 20 }}>{item.emoji}</span>
+                      <div><div className="m-dish">{item.name}</div><div className="m-cost">{item.cost}</div></div>
                     </div>
+                    <div className={`m-margin ${item.cls}`}>{item.margin} margin</div>
                   </div>
                 ))}
+              </div>
+              <div className="mockup-foot">
+                <span className="mockup-foot-lbl">Avg Food Cost This Week</span>
+                <span className="mockup-foot-val">26.4%</span>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* MORE FEATURES */}
-      <section className="more-features">
-        <div className="more-features-inner">
-          <div className="section-eyebrow">Everything else</div>
-          <h2 className="section-heading">One platform.<br /><em>No more juggling.</em></h2>
-          <div className="feat-grid">
-            {moreFeatures.map((f, i) => (
-              <div className="feat-card" key={i}>
-                <div className="feat-card-icon">{f.icon}</div>
-                <h3>{f.title}</h3>
-                <p>{f.desc}</p>
-              </div>
-            ))}
-          </div>
+      {/* RAIL */}
+      <section className="rail-section">
+        <div className="rail-header">
+          <div className="s-label">Everything else</div>
+          <h2 className="s-title">One platform.<br /><em>No more juggling.</em></h2>
         </div>
+        <div className="rail-scroll">
+          {railFeatures.map((f, i) => (
+            <div className="rail-card" key={i}>
+              <span className="rail-icon">{f.icon}</span>
+              <h3>{f.title}</h3>
+              <p>{f.desc}</p>
+            </div>
+          ))}
+        </div>
+        <div className="rail-hint">← Scroll to see more →</div>
       </section>
 
       {/* COMPARISON */}
       <section className="comparison">
         <div className="comparison-inner">
-          <div style={{ textAlign: "center" }}>
-            <div className="section-eyebrow">Side by side</div>
-            <h2 className="section-heading">Iris Financial vs.<br /><em>Toast + QuickBooks</em></h2>
-          </div>
+          <div className="s-label">Side by side</div>
+          <h2 className="s-title">Iris Financial vs.<br /><em>Toast + QuickBooks</em></h2>
           <div className="comp-wrap">
             <div className="comp-head">
-              <div className="comp-hcell feat">Feature</div>
-              <div className="comp-hcell iris-h">Iris Financial <span className="iris-rec">Best</span></div>
-              <div className="comp-hcell other-h">Toast + QB</div>
+              <div className="ch f">Feature</div>
+              <div className="ch i">Iris Financial <span className="i-pill">Best</span></div>
+              <div className="ch o">Toast + QB</div>
             </div>
             {[
               ["Recipe Costing", "✓ Built-in", "✗ Not available"],
               ["Ingredient Tracking", "✓ Built-in", "✗ Add-on required"],
-              ["Built-in POS", "✓ Iris Pay POS", "✓ Toast POS (separate)"],
               ["Auto Bookkeeping from POS", "✓ Native sync", "✗ Manual export needed"],
               ["Real-time P&L", "✓ Live", "✗ Month-end only"],
               ["Payroll", "✓ Built-in", "✗ Extra subscription"],
               ["Mobile Money (Africa/Global)", "✓ PawaPay + Stripe", "✗ US-only"],
               ["Bilingual EN/FR", "✓ Native", "✗ English only"],
             ].map(([feat, iris, other], i) => (
-              <div className="comp-row-r" key={i}>
-                <div className="comp-cell-r feat-r">{feat}</div>
-                <div className="comp-cell-r iris-r">
-                  <span className={iris.startsWith("✓") ? "ck" : "cx"}>{iris.startsWith("✓") ? "✓" : "✗"}</span>
-                  {iris.replace("✓ ", "").replace("✗ ", "")}
-                </div>
-                <div className="comp-cell-r other-r">
-                  <span className={other.startsWith("✓") ? "ck" : "cx"}>{other.startsWith("✓") ? "✓" : "✗"}</span>
-                  {other.replace("✓ ", "").replace("✗ ", "")}
-                </div>
+              <div className="comp-row" key={i}>
+                <div className="cc f">{feat}</div>
+                <div className="cc i"><span className={iris.startsWith("✓") ? "ck" : "cx"}>{iris.startsWith("✓") ? "✓" : "✗"}</span>{iris.replace("✓ ","").replace("✗ ","")}</div>
+                <div className="cc o"><span className={other.startsWith("✓") ? "ck" : "cx"}>{other.startsWith("✓") ? "✓" : "✗"}</span>{other.replace("✓ ","").replace("✗ ","")}</div>
               </div>
             ))}
-            <div className="comp-row-r price-row-r" style={{ borderTop: "2px solid rgba(212,150,10,0.15)" }}>
-              <div className="comp-cell-r feat-r" style={{ fontWeight: 700 }}>Starting Price</div>
-              <div className="comp-cell-r"><span className="big-price-iris">$0/mo</span></div>
-              <div className="comp-cell-r"><span className="big-price-other">$180+/mo</span></div>
+            <div className="comp-row price-row">
+              <div className="cc f" style={{ fontWeight: 600 }}>Starting Price</div>
+              <div className="cc i"><span className="big-i">$0/mo</span></div>
+              <div className="cc o"><span className="big-o">$180+/mo</span></div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
+      {/* TESTIMONIALS — EDITORIAL */}
       <section className="testimonials">
-        <div className="testimonials-inner">
-          <div className="testi-head">
-            <div className="section-eyebrow">From the kitchen</div>
-            <h2 className="section-heading">What restaurant owners say</h2>
+        <div className="testi-inner">
+          <div className="s-label">From the kitchen</div>
+          <h2 className="s-title" style={{ marginBottom: 0 }}>What restaurant owners say</h2>
+          <div className="testi-primary-wrap">
+            <div className="testi-primary-q">"</div>
+            <p className="testi-primary-text">{primary.q}</p>
+            <div className="testi-primary-author">
+              <div className="testi-primary-av">{primary.init}</div>
+              <div><div className="testi-primary-name">{primary.name}</div><div className="testi-primary-role">{primary.role}</div></div>
+            </div>
           </div>
-          <div className="testi-grid">
-            {testimonials.map((t, i) => (
-              <div className="testi-card" key={i}>
-                <div className="testi-stars">★★★★★</div>
-                <div className="testi-q-mark">"</div>
-                <p className="testi-text">{t.q}</p>
-                <div className="testi-author-row">
-                  <div className="testi-av">{t.init}</div>
-                  <div>
-                    <div className="testi-name">{t.name}</div>
-                    <div className="testi-role">{t.role}</div>
-                  </div>
+          <div className="testi-secondary-grid">
+            {secondary.map((t, i) => (
+              <div className="testi-secondary" key={i}>
+                <p className="testi-sec-text">"{t.q}"</p>
+                <div className="testi-sec-author">
+                  <div className="testi-sec-av">{t.init}</div>
+                  <div><div className="testi-sec-name">{t.name}</div><div className="testi-sec-role">{t.role}</div></div>
                 </div>
               </div>
             ))}
@@ -913,33 +653,31 @@ export default function RestaurantLandingPage() {
 
       {/* PRICING */}
       <section className="pricing">
-        <div className="pricing-inner">
-          <div className="section-eyebrow" style={{ textAlign: "center", color: "var(--ember)" }}>Simple pricing</div>
-          <h2 className="section-heading" style={{ textAlign: "center" }}>Start free.<br /><em>Upgrade when you're ready.</em></h2>
-          <div className="pricing-card">
-            <div className="pricing-pill">Restaurant Free Tier</div>
-            <div className="pricing-plan-name">Iris Financial — Restaurant Edition</div>
+        <div className="pricing-layout">
+          <div className="pricing-left">
+            <div className="s-label">Simple pricing</div>
+            <h2 className="s-title">Start free.<br /><em>Scale when ready.</em></h2>
+            <p>Everything a single-location restaurant needs — recipe costing, inventory, POS, and real-time P&L — on the free tier. No credit card, no expiry.</p>
             <div className="pricing-amount"><sup>$</sup>0</div>
-            <div className="pricing-per">per month — forever free to start</div>
-            <div className="pricing-features">
-              {[
-                "Recipe costing & menu margin analysis",
-                "Ingredient & inventory tracking",
-                "Supplier management & purchase orders",
-                "Built-in POS & cash register (Iris Pay)",
-                "Daily sales reports & food cost %",
-                "Professional invoicing with QR codes",
-                "Real-time P&L dashboard",
-                "Unlimited users (front-of-house + back-office)",
-                "15-day free trial — no credit card required",
-              ].map((f, i) => (
-                <div className="pricing-feat" key={i}><span className="p-ck">✓</span> {f}</div>
-              ))}
-            </div>
-            <button className="pricing-cta-btn" onClick={() => setShowModal(true)}>
-              Start Free — No Credit Card Required
-            </button>
-            <div className="pricing-note">Upgrade to Professional ($79/mo) for multi-location reporting, payroll, and advanced analytics.</div>
+            <div className="pricing-cadence">per month — forever free to start</div>
+            <button className="pricing-cta" onClick={() => setShowModal(true)}>Start Free — No Credit Card Required</button>
+            <div className="pricing-note">Professional ($79/mo) adds multi-location, payroll, and advanced analytics.</div>
+          </div>
+          <div className="pricing-right">
+            <div className="s-label" style={{ display: "block", marginBottom: 28 }}>What's included</div>
+            {[
+              "Recipe costing & menu margin analysis",
+              "Ingredient & inventory tracking with reorder alerts",
+              "Supplier management & purchase orders",
+              "Built-in POS & Iris Pay checkout",
+              "Daily food cost % and sales reports",
+              "Professional catering invoicing with QR codes",
+              "Real-time P&L dashboard",
+              "Unlimited users (front-of-house + back-office)",
+              "15-day free trial — no credit card required",
+            ].map((f, i) => (
+              <div className="p-feat" key={i}><span className="p-ck">✓</span> {f}</div>
+            ))}
           </div>
         </div>
       </section>
@@ -947,47 +685,38 @@ export default function RestaurantLandingPage() {
       {/* CTA */}
       <section className="cta-section">
         <div className="cta-inner">
-          <span className="cta-icon">🔥</span>
           <h2 className="cta-title">Stop guessing.<br />Start knowing your numbers.</h2>
-          <p className="cta-sub">Most restaurants know their reservations number. Almost none know their real food cost percentage this week. That's the gap Iris Financial closes — free to start, five minutes to set up.</p>
-          <button className="cta-btn-white" onClick={() => setShowModal(true)}>Get Started Free Today</button>
+          <p className="cta-sub">Most restaurants know their reservation count. Almost none know their real food cost percentage this week. That's the gap Iris Financial closes — free to start, five minutes to set up.</p>
+          <div className="cta-btns">
+            <button className="cta-btn-dark" onClick={() => setShowModal(true)}>Get Started Free</button>
+            <button className="cta-btn-outline">Schedule a Demo</button>
+          </div>
         </div>
       </section>
 
-      {/* FOOTER */}
       <footer className="footer">
         <div className="footer-copy"><strong>Iris Financial</strong> — by Iris Secure Technology Solutions · irisfinancial.tech</div>
         <div className="footer-links">
-          <span className="footer-lnk">Privacy</span>
-          <span className="footer-lnk">Terms</span>
-          <span className="footer-lnk">Contact</span>
+          <span className="f-lnk">Privacy</span>
+          <span className="f-lnk">Terms</span>
+          <span className="f-lnk">Contact</span>
         </div>
       </footer>
 
-      {/* MODAL */}
       {showModal && (
         <div className="modal-ov" onClick={e => e.target === e.currentTarget && setShowModal(false)}>
           <div className="modal-box">
             <button className="modal-x" onClick={() => setShowModal(false)}>✕</button>
             {!submitted ? (
               <>
-                <div className="modal-h">Start Your Free Account</div>
-                <div className="modal-s">Set up in 15 minutes. Your menu and margins will never be a mystery again.</div>
-                <div className="f-group">
-                  <label className="f-label">Your Name</label>
-                  <input className="f-input" placeholder="Owner / Manager name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} />
-                </div>
-                <div className="f-group">
-                  <label className="f-label">Restaurant Name</label>
-                  <input className="f-input" placeholder="e.g. La Maison Bistro" value={form.restaurant} onChange={e => setForm({ ...form, restaurant: e.target.value })} />
-                </div>
-                <div className="f-group">
-                  <label className="f-label">Email Address</label>
-                  <input className="f-input" type="email" placeholder="you@yourrestaurant.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} />
-                </div>
+                <div className="modal-h">Start Free Today</div>
+                <div className="modal-s">Set up in 15 minutes. Your first food cost report ready before dinner service.</div>
+                <div className="f-group"><label className="f-label">Your Name</label><input className="f-input" placeholder="Owner / Manager name" value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} /></div>
+                <div className="f-group"><label className="f-label">Restaurant Name</label><input className="f-input" placeholder="e.g. La Maison Bistro" value={form.restaurant} onChange={e => setForm({ ...form, restaurant: e.target.value })} /></div>
+                <div className="f-group"><label className="f-label">Email Address</label><input className="f-input" type="email" placeholder="you@yourrestaurant.com" value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} /></div>
                 <div className="f-group">
                   <label className="f-label">Restaurant Type</label>
-                  <select className="f-input f-select" value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
+                  <select className="f-input" style={{ cursor: "pointer" }} value={form.type} onChange={e => setForm({ ...form, type: e.target.value })}>
                     <option value="">Select type</option>
                     <option>Full-Service Restaurant</option>
                     <option>Fast Casual / QSR</option>
@@ -1002,9 +731,9 @@ export default function RestaurantLandingPage() {
               </>
             ) : (
               <div className="success-wrap">
-                <span className="success-icon-big">🍽️</span>
-                <div className="success-h">You're in the kitchen!</div>
-                <p className="success-p">We're sending your setup link to <strong style={{ color: "var(--ember-light)" }}>{form.email}</strong>. You'll be running margin reports before dinner service.</p>
+                <span className="success-emoji">🍽️</span>
+                <div className="success-h">Welcome to the kitchen!</div>
+                <p className="success-p">Setup link heading to <strong style={{ color: "var(--ember-light)" }}>{form.email}</strong>. First food cost report ready before your next service.</p>
               </div>
             )}
           </div>

@@ -569,7 +569,7 @@ export default function AutoShopPage() {
       {/* NAV */}
       <nav className="nav">
         <div className="nav-left">
-          <img src="/media/image/logo.png" alt="Iris Financial" style={{ height: "36px", width: "auto" }} />
+          <img src="/media/image/logo2.png" alt="Iris Financial" style={{ height: "36px", width: "auto" }} />
         </div>
         <div className="nav-links">
           <span className="nav-lnk">Features</span>
