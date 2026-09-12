@@ -5,6 +5,7 @@ import ChurchPage from './pages/ChurchPage.jsx'
 import RestaurantPage from './pages/RestaurantPage.jsx'
 import AutoShopPage from './pages/AutoShopPage.jsx'
 import BakeryPage from './pages/BakeryPage.jsx'
+import CarDealerPage from './pages/CarDealerPage.jsx'
 
 const Home = () => (
   <div style={{
@@ -23,6 +24,7 @@ const Home = () => (
       { path: '/restaurants', label: '🍽️ Restaurants', color: '#C4501A' },
       { path: '/autoshop', label: '🔧 Auto Repair Shops', color: '#F5C400' },
       { path: '/bakery', label: '🥖 Bakeries', color: '#C8A96E' },
+      { path: '/cardealer', label: '🚗 Car Dealers', color: '#DC2626' },
     ].map(({ path, label, color }) => (
       <Link key={path} to={path} style={{
         background: color, color: path === '/autoshop' ? '#0E0F11' : 'white',
@@ -45,6 +47,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path="/restaurants" element={<RestaurantPage />} />
       <Route path="/autoshop" element={<AutoShopPage />} />
       <Route path="/bakery" element={<BakeryPage />} />
+      <Route path="/cardealer" element={<CarDealerPage />} />
     </Routes>
   </BrowserRouter>
 )
