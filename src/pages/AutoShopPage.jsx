@@ -909,7 +909,7 @@ export default function AutoShopPage() {
           <p className="cta-sub">Every untracked part, every delayed invoice, every job without a work order is money leaving your shop. Iris Financial closes those gaps — free to start, 15 minutes to set up.</p>
           <div className="cta-btns">
             <button className="cta-btn-dark" onClick={() => setShowModal(true)}>Get Started Free</button>
-            <button className="cta-btn-outline">Schedule a Demo</button>
+            <button className="cta-btn-outline" onClick={() => window.open("https://irissecure.tech/contact#other-ways-to-connect", "_blank")}>Schedule a Demo</button>
           </div>
         </div>
       </section>

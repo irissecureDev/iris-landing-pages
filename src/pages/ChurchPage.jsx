@@ -696,7 +696,7 @@ export default function ChurchLandingPage() {
           <p className="cta-sub">Join hundreds of churches that replaced spreadsheets and the wrong software with a platform actually built for them. Free to start. No credit card. 15 minutes to set up.</p>
           <div className="cta-actions">
             <button className="btn-cta-main" onClick={() => setShowModal(true)}>Get Started Free</button>
-            <button className="btn-cta-sec">Schedule a Demo</button>
+            <button className="btn-cta-sec" onClick={() => window.open("https://irissecure.tech/contact#other-ways-to-connect", "_blank")}>Schedule a Demo</button>
           </div>
         </div>
       </section>

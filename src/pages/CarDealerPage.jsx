@@ -1073,7 +1073,7 @@ export default function CarDealerPage() {
           <p className="cta-sub">Every untracked recon cost, every car sitting past 45 days, every commission dispute is margin walking off your lot. Iris Financial closes those gaps — free to start, 15 minutes to set up.</p>
           <div className="cta-btns">
             <button className="cta-btn-dark" onClick={() => setShowModal(true)}>Get Started Free</button>
-            <button className="cta-btn-outline">Schedule a Demo</button>
+            <button className="cta-btn-outline" onClick={() => window.open("https://irissecure.tech/contact#other-ways-to-connect", "_blank")}>Schedule a Demo</button>
           </div>
         </div>
       </section>

@@ -695,7 +695,7 @@ export default function GurdwaraPage() {
           <p className="cta-sub">Every dasvandh contribution, every Langar rupee, every building fund pledge deserves a clear record. Iris Financial gives your Parbhandak Committee and your sangat the transparency they deserve — free to start.</p>
           <div className="cta-btns">
             <button className="cta-btn-main" onClick={() => setShowModal(true)}>Get Started Free</button>
-            <button className="cta-btn-sec">Schedule a Demo</button>
+            <button className="cta-btn-sec" onClick={() => window.open("https://irissecure.tech/contact#other-ways-to-connect", "_blank")}>Schedule a Demo</button>
           </div>
         </div>
       </section>

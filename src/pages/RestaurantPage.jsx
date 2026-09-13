@@ -702,7 +702,7 @@ export default function RestaurantPage() {
           <p className="cta-sub">Most restaurants know their reservation count. Almost none know their real food cost percentage this week. That's the gap Iris Financial closes — free to start, five minutes to set up.</p>
           <div className="cta-btns">
             <button className="cta-btn-dark" onClick={() => setShowModal(true)}>Get Started Free</button>
-            <button className="cta-btn-outline">Schedule a Demo</button>
+            <button className="cta-btn-outline" onClick={() => window.open("https://irissecure.tech/contact#other-ways-to-connect", "_blank")}>Schedule a Demo</button>
           </div>
         </div>
       </section>

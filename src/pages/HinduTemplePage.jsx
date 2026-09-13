@@ -718,7 +718,7 @@ export default function HinduTemplePage() {
           <p className="cta-sub">Every rupee offered, every festival expense, every Bal Vihar tuition deserves transparency. Iris Financial gives your trust board and your devotees the clarity they deserve — free to start.</p>
           <div className="cta-btns">
             <button className="cta-btn-main" onClick={() => setShowModal(true)}>Get Started Free</button>
-            <button className="cta-btn-sec">Schedule a Demo</button>
+            <button className="cta-btn-sec" onClick={() => window.open("https://irissecure.tech/contact#other-ways-to-connect", "_blank")}>Schedule a Demo</button>
           </div>
         </div>
       </section>

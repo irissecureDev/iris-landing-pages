@@ -702,7 +702,7 @@ export default function AutoDealerRepairPage() {
           <p className="cta-sub">Most hybrid shops have a gut feeling about their numbers. Iris Financial gives you the actual numbers — service gross, deal gross, recon cost, and parts margin — all separated, all real-time. Free to start.</p>
           <div className="cta-btns">
             <button className="cta-btn-main" onClick={() => setShowModal(true)}>Get Started Free</button>
-            <button className="cta-btn-sec">Schedule a Demo</button>
+            <button className="cta-btn-sec" onClick={() => window.open("https://irissecure.tech/contact#other-ways-to-connect", "_blank")}>Schedule a Demo</button>
           </div>
         </div>
       </section>

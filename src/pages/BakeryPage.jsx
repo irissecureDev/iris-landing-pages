@@ -804,7 +804,7 @@ export default function BakeryPage() {
           <p className="cta-sub">Every unbilled gram, every overproduced batch, every underpriced item is money walking out the door. Iris Financial closes those gaps — free to start, 15 minutes to set up.</p>
           <div className="cta-btns">
             <button className="cta-btn-main" onClick={() => setShowModal(true)}>Get Started Free</button>
-            <button className="cta-btn-sec">Schedule a Demo</button>
+            <button className="cta-btn-sec" onClick={() => window.open("https://irissecure.tech/contact#other-ways-to-connect", "_blank")}>Schedule a Demo</button>
           </div>
         </div>
       </section>
