@@ -1041,7 +1041,7 @@ export default function CarDealerPage() {
             <div className="p-pill">Auto Dealer Free Tier</div>
             <div className="p-name">Iris Financial — Dealer Edition</div>
             <div className="p-price"><sup>$</sup>0</div>
-            <div className="p-per">per month — forever free to start</div>
+            <div className="p-per">per month · Starter plan · forever free</div>
             <div className="p-feats">
               {[
                 "Unlimited vehicle inventory with profit tracking",

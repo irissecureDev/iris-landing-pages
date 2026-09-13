@@ -686,16 +686,16 @@ export default function HinduTemplePage() {
           <div className="pricing-left">
             <div className="s-label">Simple pricing</div>
             <h2 className="s-title">Start free.<br /><em>Scale as you grow.</em></h2>
-            <p>Everything a temple needs — dana tracking, festival budgeting, seva receipts, and giving statements — on the free tier. No credit card, no expiry.</p>
+            <p>Start on the Starter plan — free forever, no credit card needed. Get your dana funds separated and your devotee records set up in 15 minutes.</p>
             <div className="pricing-amount"><sup>$</sup>0</div>
-            <div className="pricing-cadence">per month — forever free to start</div>
+            <div className="pricing-cadence">per month · Starter plan · forever free</div>
             <button className="pricing-cta" onClick={() => setShowModal(true)}>Start Free — No Credit Card Required</button>
-            <div className="pricing-note">Professional ($79/mo) adds multi-location, payroll, and advanced analytics.</div>
+            <div className="pricing-note">Professional ($79/mo) unlocks unlimited transactions, invoices, users, and advanced features.</div>
           </div>
           <div className="pricing-right">
             <div className="s-label" style={{ display: "block", marginBottom: 28 }}>What's included</div>
             {[
-              "Devotee management with lifetime giving records",
+              "Devotee profiles & giving records (Starter: up to 50 transactions/mo)",
               "Festival & utsav dedicated fund tracking",
               "Seva, puja booking & archana fee receipts",
               "Annadanam program cost tracking",
@@ -703,7 +703,7 @@ export default function HinduTemplePage() {
               "Online dana portal + Iris Pay mobile giving",
               "Bal Vihar / Sanskrit school billing",
               "Trust board financial reports",
-              "15-day free trial — no credit card required",
+              "15-day free trial of Professional — no credit card required",
             ].map((f, i) => (
               <div className="p-feat" key={i}><span className="p-ck">✓</span> {f}</div>
             ))}

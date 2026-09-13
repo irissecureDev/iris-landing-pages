@@ -774,14 +774,14 @@ export default function BakeryPage() {
             <h2 className="s-title">Start free.<br /><em>Grow from there.</em></h2>
             <p>Everything a single-location bakery needs — recipe costing, production planning, POS, wholesale portal, and P&L — on the free tier. No trial expiry.</p>
             <div className="pricing-amount"><sup>$</sup>0</div>
-            <div className="pricing-cadence">per month — forever free to start</div>
+            <div className="pricing-cadence">per month · Starter plan · forever free</div>
             <button className="pricing-cta" onClick={() => setShowModal(true)}>Start Free — No Credit Card Required</button>
-            <div className="pricing-note">Professional ($79/mo) adds multi-location, payroll, and advanced analytics.</div>
+            <div className="pricing-note">Professional ($79/mo) unlocks unlimited transactions, invoices, users, and advanced features.</div>
           </div>
           <div className="pricing-right">
             <span className="s-label pricing-right .s-label">What's included</span>
             {[
-              "Gram-level recipe costing for unlimited products",
+              "Gram-level recipe costing (Starter: up to 10 products · Pro: unlimited)",
               "Daily production planning with inventory pull",
               "Ingredient inventory with reorder alerts",
               "Built-in cash register + Iris Pay checkout",
@@ -789,7 +789,7 @@ export default function BakeryPage() {
               "Supplier invoice sync (auto-updates recipe costs)",
               "Overproduce alerts and margin-aware scheduling",
               "Profitability reports by product line",
-              "15-day free trial — no credit card required",
+              "15-day free trial of Professional — no credit card required",
             ].map((f, i) => (
               <div className="p-feat" key={i}><span className="p-ck">✓</span> {f}</div>
             ))}

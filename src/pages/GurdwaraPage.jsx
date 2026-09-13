@@ -663,16 +663,16 @@ export default function GurdwaraPage() {
           <div className="pricing-left">
             <div className="s-label">Simple pricing</div>
             <h2 className="s-title">Start free.<br /><em>Scale as you grow.</em></h2>
-            <p>Everything a Gurdwara needs — dasvandh tracking, Langar costing, sangat management, and giving statements — on the free tier. No credit card, no expiry.</p>
+            <p>Start on the Starter plan — free forever, no credit card needed. Get your dasvandh and Langar funds separated and your sangat records set up in 15 minutes.</p>
             <div className="pricing-amount"><sup>$</sup>0</div>
-            <div className="pricing-cadence">per month — forever free to start</div>
+            <div className="pricing-cadence">per month · Starter plan · forever free</div>
             <button className="pricing-cta" onClick={() => setShowModal(true)}>Start Free — No Credit Card Required</button>
-            <div className="pricing-note">Professional ($79/mo) adds multi-location, payroll, and advanced analytics.</div>
+            <div className="pricing-note">Professional ($79/mo) unlocks unlimited transactions, invoices, users, and advanced features.</div>
           </div>
           <div className="pricing-right">
             <div className="s-label" style={{ display: "block", marginBottom: 28 }}>What's included</div>
             {[
-              "Sangat family profiles with full giving records",
+              "Sangat family profiles & giving records (Starter: up to 50 transactions/mo)",
               "Dasvandh, Langar, and building fund separation",
               "Weekly Langar cost tracking (per-plate costing)",
               "IRS-compliant year-end giving statements (bulk email)",
@@ -680,7 +680,7 @@ export default function GurdwaraPage() {
               "Gurpurab and festival event budgeting",
               "Gurmat Vidya / Sikh studies school billing",
               "Parbhandak Committee financial reports",
-              "15-day free trial — no credit card required",
+              "15-day free trial of Professional — no credit card required",
             ].map((f, i) => (
               <div className="p-feat" key={i}><span className="p-ck">✓</span> {f}</div>
             ))}

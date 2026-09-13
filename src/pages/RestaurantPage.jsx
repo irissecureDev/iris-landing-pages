@@ -670,11 +670,11 @@ export default function RestaurantPage() {
           <div className="pricing-left">
             <div className="s-label">Simple pricing</div>
             <h2 className="s-title">Start free.<br /><em>Scale when ready.</em></h2>
-            <p>Everything a single-location restaurant needs — recipe costing, inventory, POS, and real-time P&L — on the free tier. No credit card, no expiry.</p>
+            <p>Start on the Starter plan — free forever, no credit card needed. Get your first food cost report before dinner service. Upgrade when your operation grows.</p>
             <div className="pricing-amount"><sup>$</sup>0</div>
-            <div className="pricing-cadence">per month — forever free to start</div>
+            <div className="pricing-cadence">per month · Starter plan · forever free</div>
             <button className="pricing-cta" onClick={() => setShowModal(true)}>Start Free — No Credit Card Required</button>
-            <div className="pricing-note">Professional ($79/mo) adds multi-location, payroll, and advanced analytics.</div>
+            <div className="pricing-note">Professional ($79/mo) unlocks unlimited transactions, invoices, users, and advanced features.</div>
           </div>
           <div className="pricing-right">
             <div className="s-label" style={{ display: "block", marginBottom: 28 }}>What's included</div>
@@ -686,7 +686,7 @@ export default function RestaurantPage() {
               "Daily food cost % and sales reports",
               "Professional catering invoicing with QR codes",
               "Real-time P&L dashboard",
-              "Unlimited users (front-of-house + back-office)",
+              "1 user on Starter · unlimited on Professional ($79/mo)",
               "15-day free trial — no credit card required",
             ].map((f, i) => (
               <div className="p-feat" key={i}><span className="p-ck">✓</span> {f}</div>

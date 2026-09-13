@@ -672,7 +672,7 @@ export default function ChurchLandingPage() {
             <div className="price-label">Church Free Tier</div>
             <div className="price-plan">Iris Financial — Church Edition</div>
             <div className="price-amount"><sup>$</sup>0</div>
-            <div className="price-cadence">per month — forever free to start</div>
+            <div className="price-cadence">per month · Starter plan · forever free</div>
             <div className="price-features">
               {priceFeatures.map((f, i) => (
                 <div className="price-feature" key={i}>

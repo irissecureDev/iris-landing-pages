@@ -689,16 +689,16 @@ export default function MosquePage() {
           <div className="pricing-left">
             <div className="s-label">Simple pricing</div>
             <h2 className="s-title">Start free.<br /><em>Scale as you grow.</em></h2>
-            <p>Everything a masjid needs — Zakat tracking, donor management, fund separation, and giving statements — on the free tier. No credit card, no expiry.</p>
+            <p>Start on the Starter plan — free forever, no credit card needed. Get your Zakat and Sadaqah funds separated and your donor records set up in 15 minutes.</p>
             <div className="pricing-amount"><sup>$</sup>0</div>
-            <div className="pricing-cadence">per month — forever free to start</div>
+            <div className="pricing-cadence">per month · Starter plan · forever free</div>
             <button className="pricing-cta" onClick={() => setShowModal(true)}>Start Free — No Credit Card Required</button>
-            <div className="pricing-note">Professional ($79/mo) adds multi-location, payroll, and advanced analytics.</div>
+            <div className="pricing-note">Professional ($79/mo) unlocks unlimited transactions, invoices, users, and advanced features.</div>
           </div>
           <div className="pricing-right">
             <div className="s-label" style={{ display: "block", marginBottom: 28 }}>What's included</div>
             {[
-              "Unlimited donor profiles & giving records",
+              "Donor profiles & giving records (Starter: up to 50 transactions/mo)",
               "Zakat, Sadaqah, and dedicated fund separation",
               "IRS-compliant year-end giving statements (bulk email)",
               "IRS Form 990 data exports",
@@ -706,7 +706,7 @@ export default function MosquePage() {
               "Ramadan giving dashboard",
               "Quran school and program billing",
               "Financial reports for board meetings",
-              "15-day free trial — no credit card required",
+              "15-day free trial of Professional — no credit card required",
             ].map((f, i) => (
               <div className="p-feat" key={i}><span className="p-ck">✓</span> {f}</div>
             ))}
