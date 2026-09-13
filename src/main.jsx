@@ -10,6 +10,8 @@ import MosquePage from './pages/MosquePage.jsx'
 import SynagoguePage from './pages/SynagoguePage.jsx'
 import HinduTemplePage from './pages/HinduTemplePage.jsx'
 import GurdwaraPage from './pages/GurdwaraPage.jsx'
+import AutoDealerRepairPage from './pages/AutoDealerRepairPage.jsx'
+import IrisWorkplacePage from './pages/IrisWorkplacePage.jsx'
 
 const Home = () => (
   <div style={{
@@ -33,6 +35,8 @@ const Home = () => (
       { path: '/synagogue', label: '🕍 Synagogues', color: '#4A6FE3' },
       { path: '/hindutemple', label: '🛕 Hindu Temples', color: '#FF8C00' },
       { path: '/gurdwara', label: '⛩️ Gurdwaras', color: '#E8B84B' },
+      { path: '/autodealerrepair', label: '🚗 Auto Dealer + Repair', color: '#E85D04' },
+      { path: '/workplace', label: '🏢 Iris Workplace', color: '#4F46E5' },
     ].map(({ path, label, color }) => (
       <Link key={path} to={path} style={{
         background: color, color: path === '/autoshop' ? '#0E0F11' : 'white',
@@ -60,6 +64,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path="/synagogue" element={<SynagoguePage />} />
       <Route path="/hindutemple" element={<HinduTemplePage />} />
       <Route path="/gurdwara" element={<GurdwaraPage />} />
+      <Route path="/autodealerrepair" element={<AutoDealerRepairPage />} />
+      <Route path="/workplace" element={<IrisWorkplacePage />} />
     </Routes>
   </BrowserRouter>
 )
