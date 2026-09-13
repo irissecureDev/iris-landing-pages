@@ -8,6 +8,7 @@ import BakeryPage from './pages/BakeryPage.jsx'
 import CarDealerPage from './pages/CarDealerPage.jsx'
 import MosquePage from './pages/MosquePage.jsx'
 import SynagoguePage from './pages/SynagoguePage.jsx'
+import HinduTemplePage from './pages/HinduTemplePage.jsx'
 
 const Home = () => (
   <div style={{
@@ -29,6 +30,7 @@ const Home = () => (
       { path: '/cardealer', label: '🚗 Car Dealers', color: '#DC2626' },
       { path: '/mosque', label: '🕌 Masajid', color: '#00C8A0' },
       { path: '/synagogue', label: '🕍 Synagogues', color: '#4A6FE3' },
+      { path: '/hindutemple', label: '🛕 Hindu Temples', color: '#FF8C00' },
     ].map(({ path, label, color }) => (
       <Link key={path} to={path} style={{
         background: color, color: path === '/autoshop' ? '#0E0F11' : 'white',
@@ -54,6 +56,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path="/cardealer" element={<CarDealerPage />} />
       <Route path="/mosque" element={<MosquePage />} />
       <Route path="/synagogue" element={<SynagoguePage />} />
+      <Route path="/hindutemple" element={<HinduTemplePage />} />
     </Routes>
   </BrowserRouter>
 )
