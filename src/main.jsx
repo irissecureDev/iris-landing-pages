@@ -12,6 +12,8 @@ import HinduTemplePage from './pages/HinduTemplePage.jsx'
 import GurdwaraPage from './pages/GurdwaraPage.jsx'
 import AutoDealerRepairPage from './pages/AutoDealerRepairPage.jsx'
 import IrisWorkplacePage from './pages/IrisWorkplacePage.jsx'
+import ESignPage from './pages/ESignPage.jsx'
+import IrisSendPage from './pages/IrisSendPage.jsx'
 
 const Home = () => (
   <div style={{
@@ -37,6 +39,8 @@ const Home = () => (
       { path: '/gurdwara', label: '⛩️ Gurdwaras', color: '#E8B84B' },
       { path: '/autodealerrepair', label: '🚗 Auto Dealer + Repair', color: '#E85D04' },
       { path: '/workplace', label: '🏢 Iris Workplace', color: '#4F46E5' },
+      { path: '/esign', label: '✍️ E-Signature', color: '#10B981' },
+      { path: '/send', label: '📤 Iris Send', color: '#7C3AED' },
     ].map(({ path, label, color }) => (
       <Link key={path} to={path} style={{
         background: color, color: path === '/autoshop' ? '#0E0F11' : 'white',
@@ -66,6 +70,8 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path="/gurdwara" element={<GurdwaraPage />} />
       <Route path="/autodealerrepair" element={<AutoDealerRepairPage />} />
       <Route path="/workplace" element={<IrisWorkplacePage />} />
+      <Route path="/esign" element={<ESignPage />} />
+      <Route path="/send" element={<IrisSendPage />} />
     </Routes>
   </BrowserRouter>
 )
