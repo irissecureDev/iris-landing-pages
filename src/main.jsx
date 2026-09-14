@@ -14,6 +14,10 @@ import AutoDealerRepairPage from './pages/AutoDealerRepairPage.jsx'
 import IrisWorkplacePage from './pages/IrisWorkplacePage.jsx'
 import ESignPage from './pages/ESignPage.jsx'
 import IrisSendPage from './pages/IrisSendPage.jsx'
+import PersonalIndividualPage from './pages/PersonalIndividualPage.jsx'
+import PersonalFamilyPage from './pages/PersonalFamilyPage.jsx'
+import StudioRecordingPage from './pages/StudioRecordingPage.jsx'
+import GeneralBusinessPage from './pages/GeneralBusinessPage.jsx'
 
 const Home = () => (
   <div style={{
@@ -41,6 +45,10 @@ const Home = () => (
       { path: '/workplace', label: '🏢 Iris Workplace', color: '#4F46E5' },
       { path: '/esign', label: '✍️ E-Signature', color: '#10B981' },
       { path: '/send', label: '📤 Iris Send', color: '#7C3AED' },
+      { path: '/personal', label: '👤 Personal', color: '#7C3AED' },
+      { path: '/family', label: '👨‍👩‍👧 Family', color: '#F97316' },
+      { path: '/studio', label: '🎙️ Studio', color: '#E50914' },
+      { path: '/business', label: '🏢 General Business', color: '#0D9488' },
     ].map(({ path, label, color }) => (
       <Link key={path} to={path} style={{
         background: color, color: path === '/autoshop' ? '#0E0F11' : 'white',
@@ -72,6 +80,10 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       <Route path="/workplace" element={<IrisWorkplacePage />} />
       <Route path="/esign" element={<ESignPage />} />
       <Route path="/send" element={<IrisSendPage />} />
+      <Route path="/personal" element={<PersonalIndividualPage />} />
+      <Route path="/family" element={<PersonalFamilyPage />} />
+      <Route path="/studio" element={<StudioRecordingPage />} />
+      <Route path="/business" element={<GeneralBusinessPage />} />
     </Routes>
   </BrowserRouter>
 )
